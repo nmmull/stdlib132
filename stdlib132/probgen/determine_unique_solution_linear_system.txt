@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+Demonstrate that the following linear system has a unique solution. Also determine the solution.
+{lin_sys}

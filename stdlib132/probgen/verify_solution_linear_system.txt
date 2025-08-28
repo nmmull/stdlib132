@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+Verify that ${sol}$ is a solution of the following linear system.
+{lin_sys}
