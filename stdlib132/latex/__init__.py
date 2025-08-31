@@ -5,6 +5,7 @@ from .latex import (
     solution,
     row_op,
     row_ops,
+    gen_form_sol,
 )
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "solution",
     "row_op",
     "row_ops",
+    "gen_form_sol",
 ]

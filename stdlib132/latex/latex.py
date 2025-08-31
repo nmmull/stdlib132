@@ -20,7 +20,7 @@ def lin_eq(coeffs, rhs):
                 op = '-'
             else:
                 op = '+'
-            out += f' {op} {abs(coeff)}x_{{{i + 1}}}'
+            out += f' {op} {str(abs(coeff)) if abs(coeff) > 1 else ""}x_{{{i + 1}}}'
     return f'{out} &= {rhs}'
 
 def lin_sys(aug):
@@ -74,3 +74,41 @@ def row_ops(ops):
     for op in ops[:-1]:
         out += row_op(op) + ' \\\\\n'
     return out + row_op(ops[-1]) + '\n\\end{align*}'
+
+def gen_form_sol(rref):
+    def row(r):
+        nonzeros = np.nonzero(r)[0]
+        if nonzeros.size:
+            leading_index = nonzeros[0]
+        else:
+            return None
+        rhs = f'{r[-1]}'
+        for i in range(leading_index + 1, len(r) - 1):
+            scalar = r[i]
+            if scalar > 0:
+                rhs += f' - {str(scalar) if scalar > 1 else ""}x_{{{i + 1}}}'
+            elif scalar < 0:
+                rhs += f' + {str(abs(scalar)) if scalar < 1 else ""}x_{{{i + 1}}}'
+        if rhs[:4] == '0 + ':
+            rhs = rhs[4:]
+        elif rhs[:4] == '0 - ':
+            rhs = '-' + rhs[4:]
+        return f'x_{{{leading_index + 1}}} &= {rhs} \\\\\n'
+    out = '\\begin{align*}\n'
+    count = 0
+    for i in range(rref.shape[0]):
+        r = rref[i]
+        nonzeros = np.nonzero(r)[0]
+        if nonzeros.size:
+            leading_index = nonzeros[0]
+            while count < leading_index:
+                out += f'x_{{{count + 1}}} &\\text{{ is free}} \\\\\n'
+                count += 1
+            out += row(r)
+            count += 1
+        else:
+            while count < len(r) - 1:
+                out += f'x_{{{count + 1}}} &\\text{{ is free}} \\\\\n'
+                count += 1
+            return out[:-4] + '\n' + '\\end{align*}'
+    return out[:-4] + '\n' + '\\end{align*}'

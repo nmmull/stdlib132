@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Determine a general form solution for a linear system whose augmented matrix is row equivalent to the following matrix.
+\begin{{align*}}
+{rref}
+\end{{align*}}

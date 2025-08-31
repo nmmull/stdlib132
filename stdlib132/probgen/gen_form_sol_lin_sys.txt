@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Determine a general form solution for the following linear system by first determining the reduced echelon form of its augmented matrix.
+If this system has no solutions then write \textit{{NO SOLUTION}}.
+{lin_sys}

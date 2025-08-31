@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Consider the following general form solution.
+{gen_form}
+Determine a general form solution that describes the same solution set but in which $x_1$ is free.

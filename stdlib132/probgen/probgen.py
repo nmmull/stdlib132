@@ -63,3 +63,35 @@ def row_ops_pair_transform(ops, mat, ops_seed, mat_seed):
         matrix1=latex.bmatrix(mat),
         matrix2=latex.bmatrix(b),
     )
+
+def gen_form_sol_rref(rref, seed):
+    ident = "gen_form_sol_rref"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        rref=latex.bmatrix(rref),
+    )
+
+def gen_form_sol_lin_sys(aug, seed):
+    ident = "gen_form_sol_lin_sys"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        lin_sys=latex.lin_sys(aug),
+    )
+
+def determine_rref(matrix, seed):
+    ident = "determine_rref"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        matrix=latex.bmatrix(matrix),
+    )
+
+def alt_gen_form(rref, seed):
+    ident = "alt_gen_form"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        gen_form=latex.gen_form_sol(rref)
+    )
