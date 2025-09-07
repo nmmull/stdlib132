@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+Determine a vector that is in the span of the following vectors, but does not appear in the span of any pair of these vectors, i.e., the vector that you determine should not appear in $\mathsf{{span}}\{{\mathbf{{v}}_1, \mathbf{{v}}_2\}}$ or $\mathsf{{span}}\{{\mathbf{{v}}_2, \mathbf{{v}}_3\}}$ or $\mathsf{{span}}\{{\mathbf{{v}}_1, \mathbf{{v}}_3\}}$.
+{vec_set}

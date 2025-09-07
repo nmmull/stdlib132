@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Determine a general form solution for the following vector equation.
+If this equation has no solutions then write \textit{{NO SOLUTION}}.
+{vec_eq}

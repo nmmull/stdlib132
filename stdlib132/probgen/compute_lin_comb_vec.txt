@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Compute the following linear combination of vectors.
+\begin{{align*}}
+{lin_comb_vec}
+\end{{align*}}

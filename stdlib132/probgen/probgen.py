@@ -95,3 +95,68 @@ def alt_gen_form(rref, seed):
         seed=seed,
         gen_form=latex.gen_form_sol(rref)
     )
+
+def particular_sol(rref, seed):
+    ident = "particular_sol"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        rref=latex.bmatrix(rref),
+    )
+
+def compute_lin_comb_vec(coeffs, vecs, seed):
+    ident = "compute_lin_comb_vec"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        lin_comb_vec=latex.lin_comb_vec(coeffs, vecs)
+    )
+
+def equiv_vector_eq(aug, seed):
+    ident = "equiv_vector_eq"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        lin_sys=latex.lin_sys(aug),
+    )
+
+def lin_sys_of_span(matrix, seed):
+    ident = "lin_sys_of_span"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        vec_set=latex.vec_set(matrix)
+    )
+
+def in_span_of_three(matrix, seed):
+    ident = "in_span_of_three"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        vec_set=latex.vec_set(matrix),
+    )
+
+def gen_form_sol_vec_eq(aug, seed):
+    ident = "gen_form_sol_vec_eq"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        vec_eq=latex.vec_eq(aug),
+    )
+
+def vec_in_span(matrix, seed):
+    ident = "vec_in_span"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        vec_set=latex.vec_set(matrix)
+    )
+
+def span_pair_vec(vecs, seed):
+    ident = "span_pair_vec"
+    assert vecs.shape == (3, 2)
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        vec_set=latex.vec_set(vecs)
+    )

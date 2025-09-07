@@ -9,6 +9,14 @@ from .probgen import (
     gen_form_sol_lin_sys,
     determine_rref,
     alt_gen_form,
+    particular_sol,
+    compute_lin_comb_vec,
+    equiv_vector_eq,
+    lin_sys_of_span,
+    in_span_of_three,
+    gen_form_sol_vec_eq,
+    vec_in_span,
+    span_pair_vec,
 )
 
 
@@ -23,4 +31,12 @@ __all__ = [
     "gen_form_sol_lin_sys",
     "determine_rref",
     "alt_gen_form",
+    "particular_sol",
+    "compute_lin_comb_vec",
+    "equiv_vector_eq",
+    "lin_sys_of_span",
+    "in_span_of_three",
+    "gen_form_sol_vec_eq",
+    "vec_in_span",
+    "span_pair_vec",
 ]

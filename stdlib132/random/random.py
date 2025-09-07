@@ -13,6 +13,19 @@ def matrix(
     out = rng.integers(size=shape, low=low, high=high)
     return out, seed
 
+def lin_comb_vec(
+        shape,
+        rng=None,
+        seed=None,
+        low=-10,
+        high=10,
+):
+    seed = secrets.randbits(32) if seed is None else seed
+    rng = np.random.default_rng(seed) if rng is None else rng
+    coeffs = rng.integers(size=shape[1], low=low, high=high)
+    vecs = rng.integers(size=shape, low=low, high=high)
+    return coeffs, vecs, seed
+
 def rref(
         shape,
         rank=None,

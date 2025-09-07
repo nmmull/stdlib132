@@ -4,6 +4,7 @@ from .random import (
     simple_matrix,
     row_op,
     row_ops,
+    lin_comb_vec,
 )
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "simple_matrix",
     "row_op",
     "row_ops",
+    "lin_comb_vec",
 ]
