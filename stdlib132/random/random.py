@@ -145,11 +145,15 @@ def row_op(
     if op_kind == 'scale':
         return (op_kind, subscript(), coeff())
     if op_kind == 'replace':
+        i = subscript()
+        j = rng.integers(shape[0] - 1) + 1
+        if j >= i:
+            j += 1
         return (
             op_kind,
-            subscript(),
+            i,
             coeff(),
-            subscript(),
+            j,
         )
 
 def row_ops(

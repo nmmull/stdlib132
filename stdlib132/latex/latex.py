@@ -94,11 +94,14 @@ def row_op(op):
             return '-'
         return f'{x}'
     if op[0] == 'swap':
-        return f'R_{{{op[1]}}} \\leftrightarrow R_{{{op[2]}}}'
+        return f'R_{{{op[1]}}} &\\leftrightarrow R_{{{op[2]}}}'
     if op[0] == 'scale':
-        return f'R_{{{op[1]}}} \\gets {scalar(op[2])}R_{{{op[1]}}}'
+        return f'R_{{{op[1]}}} &\\gets {scalar(op[2])}R_{{{op[1]}}}'
     if op[0] == 'replace':
-        return f'R_{{{op[1]}}} \\gets R_{{{op[1]}}} + {scalar(op[2])}R_{{{op[3]}}}'
+        scalar = op[2]
+        scalar_str = f'{abs(scalar)}' if abs(scalar) > 1 else ''
+        op_str = '+' if scalar >= 1 else '-'
+        return f'R_{{{op[1]}}} &\\gets R_{{{op[1]}}} {op_str} {scalar_str}R_{{{op[3]}}}'
 
 def row_ops(ops):
     out = '\\begin{align*}\n'
