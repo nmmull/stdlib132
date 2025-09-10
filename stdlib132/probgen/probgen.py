@@ -128,8 +128,9 @@ def lin_sys_of_span(matrix, seed):
         vec_set=latex.vec_set(matrix)
     )
 
-def in_span_of_three(matrix, seed):
-    ident = "in_span_of_three"
+def in_span_of_two(matrix, seed):
+    assert(matrix.shape[1] == 2)
+    ident = "in_span_of_two"
     return prob_text(ident).format(
         ident=ident,
         seed=seed,

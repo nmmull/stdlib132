@@ -1,4 +1,4 @@
 % id: {ident}
 % seed: {seed}
-Determine a vector equation which is equivalent to the following linear system (i.e., that has the same solution set as the following linear system).
+Determine a vector equation which is equivalent to the following linear system, i.e., that has the same solution set as the following linear system. You do not need to solve the vector equation.
 {lin_sys}

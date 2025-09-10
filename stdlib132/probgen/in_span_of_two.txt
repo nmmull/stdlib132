@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+Determine a vector that is in $\mathsf{{span}}\{{\mathbf{{v}}_1, \mathbf{{v}}_2\}}$ but not in $\mathsf{{span}}\{{\mathbf{{v}}_1\}}$ or $\mathsf{{span}}\{{\mathbf{{v}}_2\}}$.  Justify your answer.
+{vec_set}
