@@ -30,7 +30,7 @@ def lin_eq(coeffs, rhs):
     return f'{lhs} &= {rhs}'
 
 def lin_sys(aug):
-    assert len(shape) == 2 and num_rows >= 1 and num_cols >= 2
+    assert len(aug.shape) == 2 and aug.shape[0] >= 1 and aug.shape[1] >= 2
     num_rows = aug.shape[0]
     num_cols = aug.shape[1]
     out = '\\begin{align*}\n'
@@ -45,7 +45,7 @@ def lin_sys(aug):
     return out
 
 def bmatrix(a):
-    assert len(a.shape) == 2 and num_rows > 0 and num_cols > 0
+    assert len(a.shape) == 2 and a.shape[0] > 0 and a.shape[1] > 0
     num_rows = a.shape[0]
     num_cols = a.shape[1]
     def row_latex(row):

@@ -1,6 +1,7 @@
 % id: {ident}
 % seed: {seed}
 Determine the reduced echelon form of the following matrix.
+You must write down the intermediate matrices and row operations you used in your calculation.
 \begin{{align*}}
 {matrix}
 \end{{align*}}
