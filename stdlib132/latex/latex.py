@@ -1,28 +1,5 @@
 import numpy as np
 
-def lin_eq(coeffs, rhs):
-    if not np.any(coeffs):
-        return f'0 = {rhs}'
-    out = ''
-    i = np.nonzero(coeffs)[0][0]
-    coeff = coeffs[i]
-    if coeff == 1:
-        coeff_str = ''
-    elif coeff == -1:
-        coeff_str = '-'
-    else:
-        coeff_str = f'{coeff}'
-    out += f'{coeff_str}x_{{{i + 1}}}'
-    for i in range(i + 1, coeffs.shape[0]):
-        coeff = coeffs[i]
-        if coeff != 0:
-            if coeff < 0:
-                op = '-'
-            else:
-                op = '+'
-            out += f' {op} {str(abs(coeff)) if abs(coeff) > 1 else ""}x_{{{i + 1}}}'
-    return f'{out} &= {rhs}'
-
 def lin_comb(coeffs, elem_strs, zero_str):
     if not np.any(coeffs):
         return zero_str
@@ -39,18 +16,23 @@ def lin_comb(coeffs, elem_strs, zero_str):
     for i in range(i + 1, coeffs.shape[0]):
         coeff=coeffs[i]
         if coeff != 0:
-            if coeff < 0:
-                op = '-'
-            else:
-                op = '+'
-            out += f' {op} {str(abs(coeff)) if abs(coeff) > 1 else ""}{elem_strs[i]}'
+            op = '+' if coeff > 0 else '-'
+            coeff = f'{abs(coeff)}' if abs(coeff) > 1 else ''
+            out += f' {op} {coeff}{elem_strs[i]}'
     return out
 
+def lin_eq(coeffs, rhs):
+    lhs = lin_comb(
+        coeffs,
+        [f'x_{{{i + 1}}}' for i in range(len(coeffs))],
+        '0'
+    )
+    return f'{lhs} &= {rhs}'
 
 def lin_sys(aug):
+    assert len(shape) == 2 and num_rows >= 1 and num_cols >= 2
     num_rows = aug.shape[0]
     num_cols = aug.shape[1]
-    assert(num_rows >= 1 and num_cols >= 2)
     out = '\\begin{align*}\n'
     for i in range(num_rows - 1):
         next_line = lin_eq(aug[i,:-1], aug[i,-1])
@@ -63,9 +45,9 @@ def lin_sys(aug):
     return out
 
 def bmatrix(a):
+    assert len(a.shape) == 2 and num_rows > 0 and num_cols > 0
     num_rows = a.shape[0]
     num_cols = a.shape[1]
-    assert num_rows > 0 and num_cols > 0
     def row_latex(row):
         out = f'{row[0]}'
         for elem in row[1:]:

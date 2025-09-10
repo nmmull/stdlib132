@@ -8,6 +8,8 @@ def matrix(
         low=-10,
         high=10,
 ):
+    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     out = rng.integers(size=shape, low=low, high=high)
@@ -20,6 +22,8 @@ def lin_comb_vec(
         low=-10,
         high=10,
 ):
+    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     coeffs = rng.integers(size=shape[1], low=low, high=high)
@@ -36,6 +40,10 @@ def rref(
         low=-6,
         high=6,
 ):
+    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    if rank is not None:
+        assert rank <= min(shape[0], shape[1])
+    assert low <= high
     num_rows = shape[0]
     num_cols = shape[1]
     seed = secrets.randbits(32) if seed is None else seed
@@ -81,6 +89,8 @@ def scrambled(
         low=-3,
         high=3,
 ):
+    assert low <= high
+    assert len(a.shape) >= 2 and a.shape[0] >= 1 and a.shape[1] >= 1
     a = np.copy(a)
     num_rows = a.shape[0]
     num_cols = a.shape[1]
@@ -106,6 +116,11 @@ def simple_matrix(
         rref_low=-6,
         rref_high=6,
 ):
+    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    if rank is not None:
+        assert rank <= min(shape[0], shape[1])
+    assert scramble_low <= scramble_high
+    assert rref_low <= rref_high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     a_rref, _ = rref(
@@ -132,13 +147,15 @@ def row_op(
         low=-5,
         high=-5,
 ):
+    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     op_kind = rng.choice(['swap', 'scale', 'replace'])
     def subscript():
         return rng.integers(shape[0]) + 1
     def coeff():
-        n = rng.integers(low=low, high=high)
+        n = rng.integers(low=low, high=high - 1)
         return n + 1 if n >= 0 else n
     if op_kind == 'swap':
         return (op_kind, subscript(), subscript())
@@ -149,12 +166,7 @@ def row_op(
         j = rng.integers(shape[0] - 1) + 1
         if j >= i:
             j += 1
-        return (
-            op_kind,
-            i,
-            coeff(),
-            j,
-        )
+        return (op_kind, i, coeff(), j)
 
 def row_ops(
         shape,
@@ -164,8 +176,8 @@ def row_ops(
         low=-5,
         high=5,
 ):
+    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
-    return \
-        [row_op(shape, rng=rng, seed=seed, low=low, high=high) for _ in range(num)], \
-        seed
+    return [row_op(shape, rng=rng, seed=seed, low=low, high=high) for _ in range(num)], seed
