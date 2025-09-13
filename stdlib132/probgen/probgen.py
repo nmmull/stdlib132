@@ -120,14 +120,6 @@ def equiv_vector_eq(aug, seed):
         lin_sys=latex.lin_sys(aug),
     )
 
-def lin_sys_of_span(matrix, seed):
-    ident = "lin_sys_of_span"
-    return prob_text(ident).format(
-        ident=ident,
-        seed=seed,
-        vec_set=latex.vec_set(matrix)
-    )
-
 def in_span_of_two(matrix, seed):
     assert(matrix.shape[1] == 2)
     ident = "in_span_of_two"

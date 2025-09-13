@@ -1,4 +1,4 @@
 % id: {ident}
 % seed: {seed}
-Determine if the vector $\mathbf v_1$ is in the span of the remaining vectors. If it does, determine the corresponding dependence relation.
+Determine if the vector $\mathbf v_1$ is in the span of the remaining vectors. If it is, determine the corresponding dependence relation, i.e., write $\mathbf v_1$ as a linear combination of the remaining vectors.
 {vec_set}

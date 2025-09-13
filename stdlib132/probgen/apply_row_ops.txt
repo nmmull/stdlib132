@@ -3,7 +3,8 @@
 % matrix seed: {mat_seed}
 Apply the row operations:
 {row_ops}
-to the following matrix.
+from top to bottom to the following matrix.
+You must write down the intermediate matrices.
 \begin{{align*}}
 {matrix}
 \end{{align*}}

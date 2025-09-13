@@ -1,4 +1,0 @@
-% id: {ident}
-% seed: {seed}
-Determine a linear system whose solution set is the span of the following vectors.\footnote{{In this problem, we are conflating vectors and points.}}
-{vec_set}
