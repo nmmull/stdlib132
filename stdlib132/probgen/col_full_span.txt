@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine if the columns of the following matrix span all of $\mathbb R^{{{n}}}$.
+Show your work and justify your answer.
+\begin{{align*}}
+{mat}
+\end{{align*}}

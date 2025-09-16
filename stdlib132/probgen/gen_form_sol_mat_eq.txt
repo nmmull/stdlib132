@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Determine a general form solution for the matrix equation $A\mathbf x = \mathbf b$ where $A$ and $\mathbf b$ are given below.
+If this equation has no solutions then write \textit{{NO SOLUTION}}.
+{mat_vec}

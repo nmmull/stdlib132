@@ -7,6 +7,7 @@ from .probgen import (
     row_ops_pair_transform,
     gen_form_sol_rref,
     gen_form_sol_lin_sys,
+    gen_form_sol_mat_eq,
     determine_rref,
     alt_gen_form,
     particular_sol,
@@ -16,6 +17,8 @@ from .probgen import (
     gen_form_sol_vec_eq,
     vec_in_span,
     span_pair_vec,
+    compute_mat_vec_mul,
+    col_full_span,
 )
 
 
@@ -28,6 +31,7 @@ __all__ = [
     "row_ops_pair_transform",
     "gen_form_sol_rref",
     "gen_form_sol_lin_sys",
+    "gen_form_sol_mat_eq"
     "determine_rref",
     "alt_gen_form",
     "particular_sol",
@@ -37,4 +41,6 @@ __all__ = [
     "gen_form_sol_vec_eq",
     "vec_in_span",
     "span_pair_vec",
+    "compute_mat_vec_mul",
+    "col_full_span",
 ]

@@ -1,0 +1,6 @@
+% id: {ident}
+% matrix seed: {mat_seed}
+% vector seed: {vec_seed}
+Compute the matrix-vector multiplication $A\mathbf v$ where $A$ and $\mathbf v$ are given below.
+If it's not possible to multiply $A$ with $\mathbf v$, then explain why.
+{mat_vec}

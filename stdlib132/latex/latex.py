@@ -135,6 +135,14 @@ def lin_comb_vec(coeffs, vecs):
         vec_strs.append(bvector(vecs[i,:]))
     return lin_comb(coeffs, vec_strs, '\\mathbf{0}')
 
+def mat_set(mats):
+    out = '\\begin{align*}\n'
+    out += f'{mats[0][0]} = {bmatrix(mats[0][1])}'
+    for (name, mat) in mats[1:]:
+        out += f' \\quad {name} = {bvector(mat)}'
+    out += '\n\\end{align*}'
+    return out
+
 def vec_set(vecs, names=None):
     if names is None:
         names = []

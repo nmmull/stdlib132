@@ -15,6 +15,23 @@ def matrix(
     out = rng.integers(size=shape, low=low, high=high)
     return out, seed
 
+def vector(
+        num,
+        rng=None,
+        seed=None,
+        low=-10,
+        high=10,
+):
+    assert num  >= 1
+    assert low <= high
+    seed = secrets.randbits(32) if seed is None else seed
+    rng = np.random.default_rng(seed) if rng is None else rng
+    out = rng.integers(size=num, low=low, high=high)
+    return out, seed
+
+
+
+
 def lin_comb_vec(
         shape,
         rng=None,

@@ -80,6 +80,18 @@ def gen_form_sol_lin_sys(aug, seed):
         lin_sys=latex.lin_sys(aug),
     )
 
+def gen_form_sol_mat_eq(aug, seed):
+    ident = "gen_form_sol_mat_eq"
+    mat_vec = latex.mat_set([
+        ("A", aug[:,:-1]),
+        ("\\mathbf b", aug[:,-1]),
+    ])
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        mat_vec=mat_vec,
+    )
+
 def determine_rref(matrix, seed):
     ident = "determine_rref"
     return prob_text(ident).format(
@@ -152,4 +164,26 @@ def span_pair_vec(vecs, seed):
         ident=ident,
         seed=seed,
         vec_set=latex.vec_set(vecs)
+    )
+
+def compute_mat_vec_mul(mat, vec, mat_seed, vec_seed):
+    ident= "compute_mat_vec_mul"
+    mat_vec = latex.mat_set([
+        ("A", mat),
+        ("\\mathbf v", vec),
+    ])
+    return prob_text(ident).format(
+        ident=ident,
+        mat_seed=mat_seed,
+        vec_seed=vec_seed,
+        mat_vec=mat_vec,
+    )
+
+def col_full_span(mat, seed):
+    ident = "col_full_span"
+    return prob_text(ident).format(
+        ident=ident,
+        seed=seed,
+        n=mat.shape[0],
+        mat=latex.bmatrix(mat),
     )

@@ -10,6 +10,7 @@ from .latex import (
     lin_comb_vec,
     vec_set,
     vec_eq,
+    mat_set,
 )
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     "lin_comb_vec",
     "vec_set",
     "vec_eq",
+    "mat_set",
 ]
