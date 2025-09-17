@@ -1,46 +1,4 @@
-from .probgen import (
-    determine_coefficient_augmented_matrix,
-    determine_linear_system,
-    determine_unique_solution_linear_system,
-    verify_solution_linear_system,
-    apply_row_ops,
-    row_ops_pair_transform,
-    gen_form_sol_rref,
-    gen_form_sol_lin_sys,
-    gen_form_sol_mat_eq,
-    determine_rref,
-    alt_gen_form,
-    particular_sol,
-    compute_lin_comb_vec,
-    equiv_vector_eq,
-    in_span_of_two,
-    gen_form_sol_vec_eq,
-    vec_in_span,
-    span_pair_vec,
-    compute_mat_vec_mul,
-    col_full_span,
-)
+import inspect
+from .probgen import *
 
-
-__all__ = [
-    "determine_coefficient_augmented_matrix",
-    "determine_linear_system",
-    "determine_unique_solution_linear_system",
-    "verify_solution_linear_system",
-    "apply_row_ops",
-    "row_ops_pair_transform",
-    "gen_form_sol_rref",
-    "gen_form_sol_lin_sys",
-    "gen_form_sol_mat_eq"
-    "determine_rref",
-    "alt_gen_form",
-    "particular_sol",
-    "compute_lin_comb_vec",
-    "equiv_vector_eq",
-    "in_span_of_two",
-    "gen_form_sol_vec_eq",
-    "vec_in_span",
-    "span_pair_vec",
-    "compute_mat_vec_mul",
-    "col_full_span",
-]
+__all__ = [name for name, func in inspect.getmembers(probgen, inspect.isfunction) if func.__module__ == probgen.__name__]

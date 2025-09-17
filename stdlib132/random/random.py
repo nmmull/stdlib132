@@ -29,9 +29,6 @@ def vector(
     out = rng.integers(size=num, low=low, high=high)
     return out, seed
 
-
-
-
 def lin_comb_vec(
         shape,
         rng=None,

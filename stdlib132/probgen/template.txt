@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+PROBLEM STATEMENT
+{data}

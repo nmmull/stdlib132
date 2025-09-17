@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+Determine if the following vectors are linearly dependent. If they are write a dependence relation, i.e., determine linear combination of the given vectors which sums to $\mathbf 0$.
+{vecs}
