@@ -160,3 +160,9 @@ def determine_lin_dep(vecs, seed):
         seed=seed,
         vecs=latex.vec_set(vecs),
     )
+
+def determine_all_lin_ind(vecs, seed):
+    return prob_text(
+        seed=seed,
+        vecs=latex.vec_set(vecs),
+    )

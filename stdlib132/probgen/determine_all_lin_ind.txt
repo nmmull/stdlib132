@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+Determine all subsets of the following vectors which are linearly independent.
+{vecs}
