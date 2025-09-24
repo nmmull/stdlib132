@@ -1,35 +1,80 @@
 import secrets
 import numpy as np
 
-def matrix(shape, rng=None, seed=None, low=-10, high=10):
-    """A random integer matrix
+def int_matrix(
+        shape: tuple[int, int],
+        rng: np.random.Generator | None = None,
+        seed: int | None = None,
+        low: int = -10,
+        high: int = 10,
+) -> tuple[np.ndarray, int]:
+    """A random integer matrix.
 
     Parameters
     ----------
     shape : tuple[int, int]
-    rng : numpy.random.Generator
-    seed : int
-    low : int
-    high : int
+        Shape of the matrix in the form `(r, c)` where `r` is the
+        number of rows and `c` is the number of columns.  We require
+        that `r >= 1` and `c >= 1`.
+    rng : numpy.random.Generator, optional
+        Random number generator used in the process. If `None` is given
+        then one is generated.
+    seed : int, optional
+        Seed used for random number generator, in the case that `rng =
+        None`.  If `rng` is not `None`, then the given value for
+        `seed` is ignored.
+    low : int, default=-10
+        Lowest integer drawn by `rng.integers`.
+    high : int, default=10
+        One above the largest integer drawn by `rng.integers`.
 
-
+    Returns
+    -------
+    numpy.ndarray
+        A random integer matrix with `r` rows and `c` columns and
+        entries between `low` (inclusive) and `high` (exclusive).
 
     """
-    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    assert shape[0] >= 1 and shape[1] >= 1
     assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     out = rng.integers(size=shape, low=low, high=high)
     return out, seed
 
-def vector(
-        num,
-        rng=None,
-        seed=None,
-        low=-10,
-        high=10,
-):
-    assert num  >= 1
+def int_vector(
+        num: int,
+        rng: np.random.Generator | None = None,
+        seed: int | None = None,
+        low: int = -10,
+        high: int = 10,
+) -> tuple[np.ndarray, int]:
+    """A random integer vector.
+
+    Parameters
+    ----------
+    num : int
+        Number of entries in the vector.  We require that `num >= 1`
+    rng : numpy.random.Generator, optional
+        Random number generator used in the process. If `None` is given
+        then one is generated.
+    seed : int, optional
+        Seed used for random number generator, in the case that `rng =
+        None`.  If `rng` is not `None`, then the given value for
+        `seed` is ignored.
+    low : int, default=-10
+        Lowest integer drawn by `rng.integers`.
+    high : int, default=10
+        One above the largest integer drawn by `rng.integers`.
+
+    Returns
+    -------
+    numpy.ndarray
+        A random integer vector with `num` entries between `low`
+        (inclusive) and `high` (exclusive).
+
+    """
+    assert num >= 1
     assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
@@ -52,8 +97,8 @@ def lin_comb_vec(
     return coeffs, vecs, seed
 
 def rref(
-        shape,
-        rank=None,
+        shape: tuple[int, int],
+        rank: int | None = None,
         force_consistent=False,
         force_first_column=True,
         rng=None,
@@ -61,9 +106,9 @@ def rref(
         low=-6,
         high=6,
 ):
-    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+    assert shape[0] >= 1 and shape[1] >= 1
     if rank is not None:
-        assert rank <= min(shape[0], shape[1])
+        assert rank >= 0 and rank <= min(shape[0], shape[1])
     assert low <= high
     num_rows = shape[0]
     num_cols = shape[1]

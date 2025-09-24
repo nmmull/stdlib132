@@ -1,6 +1,6 @@
 from .random import (
-    matrix,
-    vector,
+    int_matrix,
+    int_vector,
     rref,
     simple_matrix,
     row_op,
@@ -9,8 +9,8 @@ from .random import (
 )
 
 __all__ = [
-    "matrix",
-    "vector",
+    "int_matrix",
+    "int_vector",
     "rref",
     "simple_matrix",
     "row_op",
