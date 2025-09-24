@@ -19,6 +19,7 @@ from .probgen import (
     particular_sol,
     row_ops_pair_transform,
     span_pair_vec,
+    standalone,
     vec_in_span,
     verify_solution_linear_system,
 )
@@ -44,6 +45,7 @@ __all__ = [
     "particular_sol",
     "row_ops_pair_transform",
     "span_pair_vec",
+    "standalone",
     "vec_in_span",
     "verify_solution_linear_system",
 ]

@@ -1,0 +1,7 @@
+\documentclass{{article}}[10pt]
+\usepackage{{amsthm, amssymb, mathtools}}
+\begin{{document}}
+\begin{{enumerate}}
+{problems}
+\end{{enumerate}}
+\end{{document}}

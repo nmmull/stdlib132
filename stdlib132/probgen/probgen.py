@@ -3,20 +3,38 @@ from pathlib import Path
 import numpy as np
 import inspect
 
-here = Path(__file__).parent
-
-
 # silly but workable trick recommended by TerrierGPT
 class SafeDict(dict):
     def __missing__(self, key):
         return "{" + key + "}"
 
+here = Path(__file__).parent
 
 def prob_text(**kwargs):
     ident = inspect.stack()[1].function
     with open(here / (ident + ".txt"), "r") as f:
         return f.read().format(ident=ident, **kwargs)
 
+def standalone(problems: list[str]) -> str:
+    """Standalone latex file with problems, primarily for testing.
+
+    Parameters
+    ----------
+    problems : list[str]
+        The collection of problems that will be included in the output
+        string.
+
+    Returns
+    -------
+    str
+        String for a standalong latex file with given problems.
+    """
+    out = ""
+    for problem in problems:
+        out += f"\\item {problem}\n"
+    return prob_text(
+        problems=out,
+    )
 
 def determine_coefficient_augmented_matrix(aug, seed):
     return prob_text(
