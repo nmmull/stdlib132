@@ -48,7 +48,7 @@ def align_env(
     return lined_env(env, lines)
 
 
-def int_lin_comb(
+def lin_comb(
         coeffs: np.ndarray[tuple[int], np.int64],
         elem_strs: list[str],
         zero_str: str
@@ -95,7 +95,7 @@ def int_lin_comb(
     return out
 
 
-def int_lin_eq(
+def lin_eq(
         coeffs: np.ndarray[tuple[int], np.int64],
         rhs: int,
         aligned: bool = False
@@ -119,12 +119,12 @@ def int_lin_eq(
         Latex for a linear equation.
 
     """
-    lhs = int_lin_comb(coeffs, [f"x_{{{i + 1}}}" for i in range(len(coeffs))], "0")
+    lhs = lin_comb(coeffs, [f"x_{{{i + 1}}}" for i in range(len(coeffs))], "0")
     eq = "&=" if aligned else "="
     return f"{lhs} {eq} {rhs}"
 
 
-def int_lin_sys(aug: np.ndarray) -> str:
+def lin_sys(aug: np.ndarray) -> str:
     """Latex for a linear system.
 
     Parameters
@@ -143,8 +143,9 @@ def int_lin_sys(aug: np.ndarray) -> str:
     lines = []
     for i in range(aug.shape[0]):
         if not np.all(aug[i] == 0):
-            lines.append(int_lin_eq(aug[i, :-1], aug[i, -1], aligned=True))
+            lines.append(lin_eq(aug[i, :-1], aug[i, -1], aligned=True))
     return align_env(lines)
+
 
 def bmatrix_env(lines: list[str]):
     """`bmatrix` environment.
@@ -161,18 +162,28 @@ def bmatrix_env(lines: list[str]):
     """
     return lined_env("bmatrix", lines)
 
-def bmatrix(a):
-    """Latex for matrices and vectors using the bmatrix environment.
-    """
-    assert len(a.shape) == 2 and a.shape[0] > 0 and a.shape[1] > 0
-    num_rows = a.shape[0]
-    num_cols = a.shape[1]
+def bmatrix(a) -> str:
+    """Latex for matrices and vectors using the `bmatrix` environment.
 
+    Parameters
+    ----------
+    a
+        Array used to construct a vector or a matrix
+
+    Returns
+    str
+        Latex for `a` in a `bmatrix` environment
+
+    """
     def row_latex(row):
-        out = f"{row[0]}"
-        for elem in row[1:]:
-            out += f" & {elem}"
-        return out
+        print(row)
+        try:
+            out = f"{row[0]}"
+            for elem in row[1:]:
+                out += f" & {elem}"
+            return out
+        except (TypeError, IndexError):
+            return f"{row}"
 
     lines = []
     for row in a:
@@ -180,15 +191,20 @@ def bmatrix(a):
     return bmatrix_env(lines)
 
 
-def bvector(v):
-    num_entries = v.shape[0]
-    out = "\\begin{bmatrix}\n"
-    for entry in v[:-1]:
-        out += f"{entry} \\\\\n"
-    return f"{out}{v[-1]}\n\\end{{bmatrix}}"
+def point(v) -> tuple:
+    """Latex for a point.
 
+    Parameters
+    ----------
+    v
+        A collection of values for the entries of the point.
 
-def solution(v):
+    Returns
+    -------
+    str
+        Latex for a point.
+
+    """
     return f"{tuple(v)}"
 
 
@@ -261,7 +277,7 @@ def gen_form_sol(rref):
 def lin_comb_vec(coeffs, vecs):
     vec_strs = []
     for i in range(vecs.shape[1]):
-        vec_strs.append(bvector(vecs[i, :]))
+        vec_strs.append(bmatrix(vecs[i, :]))
     return lin_comb(coeffs, vec_strs, "\\mathbf{0}")
 
 
@@ -269,7 +285,7 @@ def mat_set(mats):
     out = "\\begin{align*}\n"
     out += f"{mats[0][0]} = {bmatrix(mats[0][1])}"
     for name, mat in mats[1:]:
-        out += f" \\quad {name} = {bvector(mat)}"
+        out += f" \\quad {name} = {bmatrix(mat)}"
     out += "\n\\end{align*}"
     return out
 
@@ -280,18 +296,18 @@ def vec_set(vecs, names=None):
         for i in range(vecs.shape[1]):
             names.append(f"\\mathbf{{v}}_{{{i + 1}}}")
     out = "\\begin{align*}\n"
-    out += f"{names[0]} = {bvector(vecs[:, 0])}"
+    out += f"{names[0]} = {bmatrix(vecs[:, 0])}"
     for i in range(1, vecs.shape[1]):
-        out += f" \\quad {names[i]} = {bvector(vecs[:, i])}"
+        out += f" \\quad {names[i]} = {bmatrix(vecs[:, i])}"
     out += "\n\\end{align*}"
     return out
 
 
 def vec_eq(aug):
     out = "\\begin{align*}\n"
-    out += f"x_1{bvector(aug[:, 0])}"
+    out += f"x_1{bmatrix(aug[:, 0])}"
     for i in range(1, aug.shape[1] - 1):
-        out += f" + x_{{{i + 1}}}{bvector(aug[:, i])}"
-    out += f"= {bvector(aug[:, -1])}\n"
+        out += f" + x_{{{i + 1}}}{bmatrix(aug[:, i])}"
+    out += f"= {bmatrix(aug[:, -1])}\n"
     out += "\\end{align*}"
     return out

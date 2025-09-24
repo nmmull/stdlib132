@@ -1,9 +1,8 @@
 from .latex import (
-    int_lin_eq,
-    int_lin_sys,
+    lin_eq,
+    lin_sys,
     bmatrix,
-    bvector,
-    solution,
+    point,
     row_op,
     row_ops,
     gen_form_sol,
@@ -14,11 +13,10 @@ from .latex import (
 )
 
 __all__ = [
-    "int_lin_eq",
-    "int_lin_sys",
+    "lin_eq",
+    "lin_sys",
     "bmatrix",
-    "bvector",
-    "solution",
+    "point",
     "row_op",
     "row_ops",
     "gen_form_sol",

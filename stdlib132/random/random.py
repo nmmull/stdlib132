@@ -1,12 +1,13 @@
 import secrets
 import numpy as np
 
+
 def int_matrix(
-        shape: tuple[int, int],
-        rng: np.random.Generator | None = None,
-        seed: int | None = None,
-        low: int = -10,
-        high: int = 10,
+    shape: tuple[int, int],
+    rng: np.random.Generator | None = None,
+    seed: int | None = None,
+    low: int = -10,
+    high: int = 10,
 ) -> tuple[np.ndarray, int]:
     """A random integer matrix.
 
@@ -42,12 +43,13 @@ def int_matrix(
     out = rng.integers(size=shape, low=low, high=high)
     return out, seed
 
+
 def int_vector(
-        num: int,
-        rng: np.random.Generator | None = None,
-        seed: int | None = None,
-        low: int = -10,
-        high: int = 10,
+    num: int,
+    rng: np.random.Generator | None = None,
+    seed: int | None = None,
+    low: int = -10,
+    high: int = 10,
 ) -> tuple[np.ndarray, int]:
     """A random integer vector.
 
@@ -81,12 +83,13 @@ def int_vector(
     out = rng.integers(size=num, low=low, high=high)
     return out, seed
 
+
 def lin_comb_vec(
-        shape,
-        rng=None,
-        seed=None,
-        low=-10,
-        high=10,
+    shape,
+    rng=None,
+    seed=None,
+    low=-10,
+    high=10,
 ):
     assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
     assert low <= high
@@ -96,15 +99,16 @@ def lin_comb_vec(
     vecs = rng.integers(size=shape, low=low, high=high)
     return coeffs, vecs, seed
 
+
 def rref(
-        shape: tuple[int, int],
-        rank: int | None = None,
-        force_consistent=False,
-        force_first_column=True,
-        rng=None,
-        seed=None,
-        low=-6,
-        high=6,
+    shape: tuple[int, int],
+    rank: int | None = None,
+    force_consistent=False,
+    force_first_column=True,
+    rng=None,
+    seed=None,
+    low=-6,
+    high=6,
 ):
     assert shape[0] >= 1 and shape[1] >= 1
     if rank is not None:
@@ -138,49 +142,50 @@ def rref(
     pivot_cols.sort()
     for i in range(rank):
         pivot_pos = pivot_cols[i]
-        num_zeros = pivot_pos
-        a[i] = np.hstack([
-            np.zeros(pivot_pos + 1),
-            rng.integers(low=low, high=high, size=num_cols - pivot_pos - 1),
-        ])
+        a[i] = np.hstack(
+            [
+                np.zeros(pivot_pos + 1),
+                rng.integers(low=low, high=high, size=num_cols - pivot_pos - 1),
+            ]
+        )
     eye = np.eye(num_rows, rank)
     for i in range(rank):
-        a[:,pivot_cols[i]] = eye[:,i]
+        a[:, pivot_cols[i]] = eye[:, i]
     return a, seed
 
+
 def scrambled(
-        a,
-        seed=None,
-        rng=None,
-        low=-3,
-        high=3,
+    a,
+    seed=None,
+    rng=None,
+    low=-3,
+    high=3,
 ):
     assert low <= high
     assert len(a.shape) >= 2 and a.shape[0] >= 1 and a.shape[1] >= 1
     a = np.copy(a)
-    num_rows = a.shape[0]
-    num_cols = a.shape[1]
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
-    for i in range(num_rows):
+    for i in range(a.shape[0]):
         for prev_i in range(i):
             a[prev_i] += rng.integers(low=low, high=high) * a[i]
-    for i in range(num_rows - 1, -1, -1):
-        for next_i in range(i + 1, num_rows):
+    for i in range(a.shape[0] - 1, -1, -1):
+        for next_i in range(i + 1, a.shape[0]):
             a[next_i] += rng.integers(low=low, high=high) * a[i]
     return a, seed
 
+
 def simple_matrix(
-        shape,
-        rank=None,
-        force_consistent=False,
-        force_first_column=True,
-        rng=None,
-        seed=None,
-        scramble_low=-3,
-        scramble_high=3,
-        rref_low=-6,
-        rref_high=6,
+    shape,
+    rank=None,
+    force_consistent=False,
+    force_first_column=True,
+    rng=None,
+    seed=None,
+    scramble_low=-3,
+    scramble_high=3,
+    rref_low=-6,
+    rref_high=6,
 ):
     assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
     if rank is not None:
@@ -206,44 +211,51 @@ def simple_matrix(
     )
     return a_rref, a, seed
 
+
 def row_op(
-        shape,
-        rng=None,
-        seed=None,
-        low=-5,
-        high=-5,
+    shape,
+    rng=None,
+    seed=None,
+    low=-5,
+    high=-5,
 ):
     assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
     assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
-    op_kind = rng.choice(['swap', 'scale', 'replace'])
+    op_kind = rng.choice(["swap", "scale", "replace"])
+
     def subscript():
         return rng.integers(shape[0]) + 1
+
     def coeff():
         n = rng.integers(low=low, high=high - 1)
         return n + 1 if n >= 0 else n
-    if op_kind == 'swap':
+
+    if op_kind == "swap":
         return (op_kind, subscript(), subscript())
-    if op_kind == 'scale':
+    if op_kind == "scale":
         return (op_kind, subscript(), coeff())
-    if op_kind == 'replace':
+    if op_kind == "replace":
         i = subscript()
         j = rng.integers(shape[0] - 1) + 1
         if j >= i:
             j += 1
         return (op_kind, i, coeff(), j)
 
+
 def row_ops(
-        shape,
-        num,
-        rng=None,
-        seed=None,
-        low=-5,
-        high=5,
+    shape,
+    num,
+    rng=None,
+    seed=None,
+    low=-5,
+    high=5,
 ):
     assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
     assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
-    return [row_op(shape, rng=rng, seed=seed, low=low, high=high) for _ in range(num)], seed
+    return [
+        row_op(shape, rng=rng, seed=seed, low=low, high=high) for _ in range(num)
+    ], seed
