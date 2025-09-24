@@ -1,7 +1,79 @@
 import numpy as np
 
+def lined_env(env: str, lines: list[str]) -> str:
+    """Latex environment with lines.
 
-def lin_comb(coeffs, elem_strs, zero_str):
+    Parameters
+    ----------
+    env : str
+        Name of the environment.
+    lines : list[str]
+        Lines to be put in the environment.
+
+    Returns
+    -------
+    str
+        Environment with `lines` (not indented).
+
+    """
+    assert len(lines) > 0
+    out = ""
+    for line in lines[:-1]:
+        out += line + " \\\\\n"
+    out += lines[-1]
+    return f"\\begin{{{env}}}\n" + out + f"\n\\end{{{env}}}"
+
+
+def align_env(
+        lines: list[str],
+        star: bool = True
+) -> str:
+    """`align*` environment.
+
+    Parameters
+    ----------
+    lines : list[str]
+        Lines to be put in an `align` environment.
+    star : bool, default=True
+        Determines if number labels should be removed from the lines
+        in the environment.
+
+    Returns
+    -------
+    str
+        `align` environment with `lines` (not indented)
+
+    """
+    env = "align" + ("*" if star else "")
+    return lined_env(env, lines)
+
+
+def int_lin_comb(
+        coeffs: np.ndarray[tuple[int], np.int64],
+        elem_strs: list[str],
+        zero_str: str
+) -> str:
+    """Latex for a linear combination.
+
+    Parameters
+    ----------
+    coeff : numpy.npdarray[tuple[int], np.int64]
+        Coefficients used in the linear combination.  This is required
+        to be a 1D array.  We only support integer coefficents as of
+        now.
+    elem_strs : list[str]
+        The strings used for the elements of the linear combination.
+    zero_str : str
+        The string used in the case that all coefficients are `0`.
+
+    Returns
+    -------
+    str
+        Latex for a linear combination.
+
+    """
+    assert len(coeffs.shape) == 1
+    assert len(elem_strs) == coeffs.shape[0]
     if not np.any(coeffs):
         return zero_str
     i = np.nonzero(coeffs)[0][0]
@@ -23,28 +95,75 @@ def lin_comb(coeffs, elem_strs, zero_str):
     return out
 
 
-def lin_eq(coeffs, rhs):
-    lhs = lin_comb(coeffs, [f"x_{{{i + 1}}}" for i in range(len(coeffs))], "0")
-    return f"{lhs} &= {rhs}"
+def int_lin_eq(
+        coeffs: np.ndarray[tuple[int], np.int64],
+        rhs: int,
+        aligned: bool = False
+) -> str:
+    """Latex for a linear equation.
+
+    Parameters
+    ----------
+    coeffs : np.ndarray
+        The coefficents used for the left side of the equation.  We
+        only support integer coefficents as of now.
+    rhs: int
+        The value used for the right side of the equation
+    aligned : bool, default=False
+        Determined whether or not to include `&` for the `align*`
+        environment
+
+    Return
+    ------
+    str
+        Latex for a linear equation.
+
+    """
+    lhs = int_lin_comb(coeffs, [f"x_{{{i + 1}}}" for i in range(len(coeffs))], "0")
+    eq = "&=" if aligned else "="
+    return f"{lhs} {eq} {rhs}"
 
 
-def lin_sys(aug):
-    assert len(aug.shape) == 2 and aug.shape[0] >= 1 and aug.shape[1] >= 2
-    num_rows = aug.shape[0]
-    num_cols = aug.shape[1]
-    out = "\\begin{align*}\n"
-    for i in range(num_rows - 1):
-        next_line = lin_eq(aug[i, :-1], aug[i, -1])
-        if next_line != "0 = 0":
-            out += next_line + " \\\\\n"
-    last_line = lin_eq(aug[-1, :-1], aug[-1, -1])
-    if last_line != "0 = 0":
-        out += last_line + "\n"
-    out += "\\end{align*}"
-    return out
+def int_lin_sys(aug: np.ndarray) -> str:
+    """Latex for a linear system.
 
+    Parameters
+    ----------
+    aug : numpy.ndarray
+        The augmented matrix of a linear system.
+
+    Returns
+    -------
+    str
+        Latex for the linear system with augmented matrix `aug`
+
+    """
+    assert len(aug.shape) == 2
+    assert aug.shape[0] >= 1 and aug.shape[1] >= 2
+    lines = []
+    for i in range(aug.shape[0]):
+        if not np.all(aug[i] == 0):
+            lines.append(int_lin_eq(aug[i, :-1], aug[i, -1], aligned=True))
+    return align_env(lines)
+
+def bmatrix_env(lines: list[str]):
+    """`bmatrix` environment.
+
+    Parameters
+    ----------
+    lines: list[str]
+
+    Returns
+    -------
+    str
+        Lines put in a `bmatrix` environment.
+
+    """
+    return lined_env("bmatrix", lines)
 
 def bmatrix(a):
+    """Latex for matrices and vectors using the bmatrix environment.
+    """
     assert len(a.shape) == 2 and a.shape[0] > 0 and a.shape[1] > 0
     num_rows = a.shape[0]
     num_cols = a.shape[1]
@@ -55,10 +174,10 @@ def bmatrix(a):
             out += f" & {elem}"
         return out
 
-    out = "\\begin{bmatrix}\n"
-    for row in a[:-1]:
-        out += row_latex(row) + " \\\\\n"
-    return out + row_latex(a[-1]) + "\n\\end{bmatrix}"
+    lines = []
+    for row in a:
+        lines.append(row_latex(row))
+    return bmatrix_env(lines)
 
 
 def bvector(v):

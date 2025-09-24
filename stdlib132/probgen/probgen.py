@@ -36,7 +36,7 @@ def determine_unique_solution_linear_system(aug, seed):
     assert np.linalg.matrix_rank(aug) == aug.shape[0]
     return prob_text(
         seed=seed,
-        lin_sys=latex.lin_sys(aug),
+        lin_sys=latex.int_lin_sys(aug),
     )
 
 
@@ -44,7 +44,7 @@ def verify_solution_linear_system(sol, aug, seed):
     return prob_text(
         seed=seed,
         sol=latex.solution(sol),
-        lin_sys=latex.lin_sys(aug),
+        lin_sys=latex.int_lin_sys(aug),
     )
 
 
@@ -78,7 +78,7 @@ def gen_form_sol_rref(rref, seed):
 def gen_form_sol_lin_sys(aug, seed):
     return prob_text(
         seed=seed,
-        lin_sys=latex.lin_sys(aug),
+        lin_sys=latex.int_lin_sys(aug),
     )
 
 
@@ -120,7 +120,7 @@ def compute_lin_comb_vec(coeffs, vecs, seed):
 def equiv_vector_eq(aug, seed):
     return prob_text(
         seed=seed,
-        lin_sys=latex.lin_sys(aug),
+        lin_sys=latex.int_lin_sys(aug),
     )
 
 
