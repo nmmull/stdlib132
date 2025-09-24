@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def lined_env(env: str, lines: list[str]) -> str:
     """Latex environment with lines.
 
@@ -24,10 +25,7 @@ def lined_env(env: str, lines: list[str]) -> str:
     return f"\\begin{{{env}}}\n" + out + f"\n\\end{{{env}}}"
 
 
-def align_env(
-        lines: list[str],
-        star: bool = True
-) -> str:
+def align_env(lines: list[str], star: bool = True) -> str:
     """`align*` environment.
 
     Parameters
@@ -48,11 +46,7 @@ def align_env(
     return lined_env(env, lines)
 
 
-def lin_comb(
-        coeffs: np.ndarray,
-        elem_strs: list[str],
-        zero_str: str
-) -> str:
+def lin_comb(coeffs: np.ndarray, elem_strs: list[str], zero_str: str) -> str:
     """Latex for a linear combination.
 
     Parameters
@@ -95,11 +89,7 @@ def lin_comb(
     return out
 
 
-def lin_eq(
-        coeffs: np.ndarray,
-        rhs: int,
-        aligned: bool = False
-) -> str:
+def lin_eq(coeffs: np.ndarray, rhs: int, aligned: bool = False) -> str:
     """Latex for a linear equation.
 
     Parameters
@@ -162,6 +152,7 @@ def bmatrix_env(lines: list[str]):
     """
     return lined_env("bmatrix", lines)
 
+
 def bmatrix(a) -> str:
     """Latex for matrices and vectors using the `bmatrix` environment.
 
@@ -175,6 +166,7 @@ def bmatrix(a) -> str:
         Latex for `a` in a `bmatrix` environment
 
     """
+
     def row_latex(row):
         print(row)
         try:
