@@ -1,13 +1,20 @@
 import secrets
 import numpy as np
 
-def matrix(
-        shape,
-        rng=None,
-        seed=None,
-        low=-10,
-        high=10,
-):
+def matrix(shape, rng=None, seed=None, low=-10, high=10):
+    """A random integer matrix
+
+    Parameters
+    ----------
+    shape : tuple[int, int]
+    rng : numpy.random.Generator
+    seed : int
+    low : int
+    high : int
+
+
+
+    """
     assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
     assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
