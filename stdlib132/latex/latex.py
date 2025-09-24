@@ -49,7 +49,7 @@ def align_env(
 
 
 def lin_comb(
-        coeffs: np.ndarray[tuple[int], np.int64],
+        coeffs: np.ndarray,
         elem_strs: list[str],
         zero_str: str
 ) -> str:
@@ -96,7 +96,7 @@ def lin_comb(
 
 
 def lin_eq(
-        coeffs: np.ndarray[tuple[int], np.int64],
+        coeffs: np.ndarray,
         rhs: int,
         aligned: bool = False
 ) -> str:
@@ -191,7 +191,7 @@ def bmatrix(a) -> str:
     return bmatrix_env(lines)
 
 
-def point(v) -> tuple:
+def point(v) -> str:
     """Latex for a point.
 
     Parameters
