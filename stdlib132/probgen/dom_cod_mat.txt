@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine the domain and the codomain of the following linear transformation $T$.
+Also determine a matrix $A$ such that $T(\mathbf{{v}}) = A(\mathbf{{v}})$ for all vectors $\mathbf{{v}}$ in the domain of $T$.
+\begin{{align*}}
+{lin_trans}
+\end{{align*}}

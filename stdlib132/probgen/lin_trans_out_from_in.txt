@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Suppose that the linear transformation $T$ has the following input-output behavior.
+{outputs}
+Determine the image of the following vector under $T$.
+\begin{{align*}}
+{vec}
+\end{{align*}}

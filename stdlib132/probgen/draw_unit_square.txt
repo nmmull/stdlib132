@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Draw the image of the unit square under the matrix transformation $\mathbf x \mapsto A\mathbf x$ where $A$ is defined as below.
+\begin{{align*}}
+{mat}
+\end{{align*}}

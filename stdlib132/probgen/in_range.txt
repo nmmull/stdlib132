@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine if the vector $\mathbf v$ is in the range of the matrix transformation $T$ given by $\mathbf x \mapsto A \mathbf x$, where $A$ and $\mathbf v$ are defined below.
+If $\mathbf v$ is in the range of $T$, then determine a vector whose image under $T$ is $\mathbf v$.
+Furthermore, state whether the vector you determined is unique, i.e., determine if there is another vector whose image under $T$ is $\mathbf v$.
+Explain your answer.
+{mat_vec}

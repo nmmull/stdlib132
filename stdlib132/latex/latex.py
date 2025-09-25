@@ -51,7 +51,7 @@ def lin_comb(coeffs: np.ndarray, elem_strs: list[str], zero_str: str) -> str:
 
     Parameters
     ----------
-    coeff : numpy.npdarray[tuple[int], np.int64]
+    coeff : numpy.ndarray
         Coefficients used in the linear combination.  This is required
         to be a 1D array.  We only support integer coefficents as of
         now.
@@ -168,7 +168,8 @@ def bmatrix(a) -> str:
     """
 
     def row_latex(row):
-        print(row)
+        if isinstance(row, str):
+            return row
         try:
             out = f"{row[0]}"
             for elem in row[1:]:
@@ -199,6 +200,29 @@ def point(v) -> str:
     """
     return f"{tuple(v)}"
 
+
+def lin_transform(a: np.ndarray) -> str:
+    """Latex for a linear transformation
+
+    Parameters
+    ----------
+    a : numpy.ndarray
+        The coefficients used in the output entires of the linear
+        transformation.
+
+    Returns
+    -------
+    str
+        Latex for the linear transformation defined by `a`
+
+    """
+    assert len(a.shape) == 2
+    assert a.shape[0] >= 1 and a.shape[1] >= 1
+    var_names = [f"x_{{{i + 1}}}" for i in range(a.shape[1])]
+    lin_combs = []
+    for coeffs in a:
+        lin_combs.append(lin_comb(coeffs, var_names, "0"))
+    return f"{bmatrix(var_names)} \\mapsto {bmatrix(lin_combs)}"
 
 def row_op(op):
     def scalar(x):

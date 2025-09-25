@@ -8,7 +8,7 @@ def int_matrix(
     seed: int | None = None,
     low: int = -10,
     high: int = 10,
-) -> tuple[np.ndarray, int]:
+) -> np.ndarray:
     """A random integer matrix.
 
     Parameters
@@ -21,9 +21,10 @@ def int_matrix(
         Random number generator used in the process. If `None` is given
         then one is generated.
     seed : int, optional
-        Seed used for random number generator, in the case that `rng =
-        None`.  If `rng` is not `None`, then the given value for
-        `seed` is ignored.
+        Seed used for the random number generator, in the case that
+        `rng = None`.  If `rng` is not `None`, then the given value
+        for `seed` is ignored.
+
     low : int, default=-10
         Lowest integer drawn by `rng.integers`.
     high : int, default=10
@@ -41,7 +42,7 @@ def int_matrix(
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     out = rng.integers(size=shape, low=low, high=high)
-    return out, seed
+    return out
 
 
 def int_vector(
@@ -50,7 +51,7 @@ def int_vector(
     seed: int | None = None,
     low: int = -10,
     high: int = 10,
-) -> tuple[np.ndarray, int]:
+) -> np.ndarray:
     """A random integer vector.
 
     Parameters
@@ -81,7 +82,7 @@ def int_vector(
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     out = rng.integers(size=num, low=low, high=high)
-    return out, seed
+    return out
 
 
 def lin_comb_vec(
@@ -209,7 +210,7 @@ def simple_matrix(
         low=scramble_low,
         high=scramble_high,
     )
-    return a_rref, a, seed
+    return a_rref, a
 
 
 def row_op(

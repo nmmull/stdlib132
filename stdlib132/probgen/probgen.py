@@ -41,6 +41,201 @@ def standalone(problems: list[str]) -> str:
     )
 
 
+def dom_cod_mat(a: np.ndarray, seed: int) -> str:
+    """Determine domain, codomain, and underyling matrix.
+
+    Parameters
+    ----------
+    a : np.array
+        Matrix defining the linear transformation.
+    seed : int
+        Seed used to generate `a`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in `dom_cod_mat.txt`
+
+    """
+    return prob_text(
+        seed=seed,
+        lin_trans=latex.lin_transform(a),
+    )
+
+def in_range(aug: np.ndarray, seed: int) -> str:
+    """Determine if vector is in range.
+
+    Parameters
+    ----------
+    aug : np.ndarray
+        Augmented matrix used for the problem.  We take the vector to
+        be `aug[:,-1]` and the matrix to be `aug[:,:-1]`.
+    seed: int
+        Seed used to generate `aug`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in `in_range.txt`.
+
+    """
+    mat_vec = latex.mat_set(
+        [
+            ("A", aug[:, :-1]),
+            ("\\mathbf v", aug[:, -1]),
+        ]
+    )
+    return prob_text(
+        seed=seed,
+        mat_vec=mat_vec
+    )
+
+
+def compute_lin_trans(vecs: np.ndarray, coeffs : np.ndarray, seed: int) -> str:
+    """Compute linear transformation on given input.
+
+    Parameters
+    ----------
+    vecs : np.ndarray
+        Vectors used as inputs to the linear transformation.
+    coeffs : np.ndarray
+        Values used in linear combination.  `coeffs` should have
+        `vecs.shape[1]` entries.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in `compute_lin_trans.txt`.
+
+    """
+    assert len(vecs.shape) == 2
+    assert len(coeffs.shape) == 1
+    assert vecs.shape[1] == coeffs.shape[0]
+    var_names = [f"\\mathbf v_{{{i + 1}}}" for i in range(vecs.shape[1])]
+    apps = list(map(lambda s: f"T({s})", var_names))
+    vecs = [vecs[:,i] for i in range(vecs.shape[1])]
+    out = latex.mat_set(list(zip(apps, vecs)))
+    lin_comb = latex.lin_comb(
+        coeffs,
+        var_names,
+        "\\mathbf 0"
+    )
+    return prob_text(
+        seed=seed,
+        lin_comb=lin_comb,
+        out=out,
+    )
+
+def lin_trans_out_from_in(mat: np.ndarray, aug: np.ndarray, seed: int) -> str:
+    """Determine the image given a collection of images.
+
+    Parameters
+    ----------
+    mat : np.ndarray
+        Matrix for the linear transformation.
+    aug : np.ndarray
+        Augmented matrix used to generate inputs to the function.
+    seed : int
+        Seed used to generate `aug`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in lin_trans_out_from_in.txt.
+
+    """
+    assert len(mat.shape) == 2
+    assert len(aug.shape) == 2
+    assert mat.shape[1] == aug.shape[0]
+    vecs = aug[:,:-1]
+    rhs = aug[:,-1]
+
+    in_strs = [f"T\\left({latex.bmatrix(vecs[i,:])}\\right)" for i in range(vecs.shape[1])]
+    outs = [mat @ vecs[i,:] for i in range(vecs.shape[1])]
+    in_outs = list(zip(in_strs, outs))
+    return prob_text(
+        seed=seed,
+        outputs=latex.mat_set(in_outs),
+        vec=latex.bmatrix(rhs),
+    )
+
+def matrix_from_lin_trans(mat: np.ndarray, aug: np.ndarray, seed: int) -> str:
+    """Determine the matrix of a linear transformation given a
+    collection of images.
+
+    Parameters
+    ----------
+    mat : np.ndarray
+        Matrix for the linear transformation.
+    aug : np.ndarray
+        Augmented matrix used to generate inputs to the function.
+    seed : int
+        Seed used to generate `aug`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in matrix_from_lin_trans.txt.
+
+    """
+    assert len(mat.shape) == 2
+    assert len(aug.shape) == 2
+    assert mat.shape[1] == aug.shape[0]
+    vecs = aug[:,:-1]
+    rhs = aug[:,-1]
+
+    in_strs = [f"T\\left({latex.bmatrix(vecs[i,:])}\\right)" for i in range(vecs.shape[1])]
+    outs = [mat @ vecs[i,:] for i in range(vecs.shape[1])]
+    in_outs = list(zip(in_strs, outs))
+    return prob_text(
+        seed=seed,
+        outputs=latex.mat_set(in_outs),
+    )
+
+
+def one_to_one_onto_matrix_trans(mat: np.ndarray, seed: int) -> str:
+    """Determine if matrix tranformation is 1-1/onto.
+
+    Parameters
+    ----------
+    mat:
+        Matrix for the transformation.
+    seed:
+        Seed used to generate `mat`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in one_to_one_onto_matrix_trans.txt.
+
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+
+def draw_unit_square(mat: np.ndarray, seed: int) -> str:
+    """Determine if matrix tranformation is 1-1/onto.
+
+    Parameters
+    ----------
+    mat:
+        Matrix for the transformation.  It must be a 2 by 2 matrix.
+    seed:
+        Seed used to generate `mat`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in draw_unit_square.txt.
+
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
 def determine_coefficient_augmented_matrix(aug, seed):
     return prob_text(
         seed=seed,

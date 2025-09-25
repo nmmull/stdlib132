@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Let $T$ be a linear transformation with the following input-output behavior.
+{out}
+Determine the vector $T({lin_comb})$.

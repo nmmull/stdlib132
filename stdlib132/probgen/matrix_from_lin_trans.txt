@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Let $T$ be a linear transformation with the following input-output behavior.
+{outputs}
+Determine the matrix that implements $T$, i.e., determine the matrix $A$ such that $T(\mathbf v) = A \mathbf v$ for all vectors $\mathbf v$ in the domain of $T$.

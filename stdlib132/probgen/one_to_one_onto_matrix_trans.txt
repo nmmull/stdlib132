@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine if the matrix transformation $\mathbf x \mapsto A\mathbf x$ is one-to-one, onto, both, or neither, where $A$ is defined as below.
+Explain your answer.
+\begin{{align*}}
+{mat}
+\end{{align*}}
