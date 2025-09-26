@@ -275,12 +275,11 @@ def apply_row_ops(row_ops, a, ops_seed, mat_seed):
     )
 
 
-def row_ops_pair_transform(ops, mat, ops_seed, mat_seed):
+def row_ops_pair_transform(ops, mat, seed):
     b = np.copy(mat)
     utils.apply_row_ops(ops, b)
     return prob_text(
-        ops_seed=ops_seed,
-        mat_seed=mat_seed,
+        seed=seed,
         matrix1=latex.bmatrix(mat),
         matrix2=latex.bmatrix(b),
     )

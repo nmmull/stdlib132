@@ -1,6 +1,5 @@
 % id: {ident}
-% ops seed: {ops_seed}
-% matrix seed: {mat_seed}
+% ops seed: {seed}
 Determine a pair of row operations that transform the matrix $A$ into the matrix $B$.
 \begin{{align*}}
 A
