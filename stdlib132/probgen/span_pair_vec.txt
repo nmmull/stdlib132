@@ -1,4 +1,5 @@
 % id: {ident}
 % seed: {seed}
-Determine a linear equation whose point set is the span of the following vectors.\footnote{{In this problem, we are conflating vectors and points.}}  The linear equation you determine should have relatively prime integer coefficients (i.e., it should not be possible to divide the equation by an integer value and get a new equation with integer coefficients).
+Determine a linear equation whose point set is the span of the following vectors.
+The linear equation you determine should have relatively prime integer coefficients (i.e., it should not be possible to divide the equation by an integer value and get a new equation with integer coefficients).
 {vec_set}
