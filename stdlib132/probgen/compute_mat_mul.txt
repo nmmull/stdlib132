@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Compute the matrix multiplication $A B$ where $A$ and $B$ are given below.
+If it's not possible to multiply $A$ with $B$, then explain why.
+{mats}

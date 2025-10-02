@@ -1,19 +1,25 @@
 from .random import (
     int_matrix,
     int_vector,
-    rref,
-    simple_matrix,
+    lin_comb,
+    lin_comb_vec,
+    rng,
     row_op,
     row_ops,
-    lin_comb_vec,
+    rref,
+    seed,
+    simple_matrix,
 )
 
 __all__ = [
     "int_matrix",
     "int_vector",
-    "rref",
-    "simple_matrix",
+    "lin_comb",
+    "lin_comb_vec",
+    "rng",
     "row_op",
     "row_ops",
-    "lin_comb_vec",
+    "rref",
+    "seed",
+    "simple_matrix",
 ]

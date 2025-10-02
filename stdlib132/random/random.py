@@ -1,6 +1,11 @@
 import secrets
 import numpy as np
 
+def seed():
+    return secrets.randbits(32)
+
+def rng(seed):
+    return np.random.default_rng(seed)
 
 def int_matrix(
     shape: tuple[int, int],
@@ -46,11 +51,11 @@ def int_matrix(
 
 
 def int_vector(
-    num: int,
-    rng: np.random.Generator | None = None,
-    seed: int | None = None,
-    low: int = -10,
-    high: int = 10,
+        num: int,
+        rng: np.random.Generator | None = None,
+        seed: int | None = None,
+        low: int = -10,
+        high: int = 10,
 ) -> np.ndarray:
     """A random integer vector.
 
@@ -85,8 +90,62 @@ def int_vector(
     return out
 
 
+def lin_comb(
+        num : int,
+        shape: tuple[int, int],
+        rng: np.random.Generator | None = None,
+        seed: int | None = None,
+        low: int = -10,
+        high: int = 10,
+        low_coeff : int = -5,
+        high_coeff : int = 5,
+) -> tuple[np.ndarray, np.ndarray]:
+    """A random linear combination of matrices.
+
+    Parameters
+    ----------
+    num : int
+        Number of matrices in the linear combination.
+    shape : tuple[int, int]
+        Shape of the matrices in the linear combination.
+    rng : numpy.random.Generator , option
+        Random number used in the process. If `None` is given then a
+        generator is created.
+    seed : int , option
+        Seed used for random number generator, in the case that `rng`
+        is `None.  If `rng` is not `None`, then `seed is ignored.
+    low : int, default=-10
+        Lowest integer drawn by `rng.integers` for entires in the
+        matrices.
+    high : int, default=10
+        One above the largest integer drawn by `rng.integers` for
+        entries in the matrices.
+    low_coeff : int, default=-5
+        Lowest integer drawn by `rng.integers` for coefficients.
+    high_coeff : int, default=15
+        One above the largest integer drawn by `rng.integers` for
+        coefficients.
+
+    Returns
+    -------
+    list[tuple[numpy.ndarray, list[np.ndarray]]]
+        List of matrices along with their coefficients in the linear
+        combination.
+
+    """
+    seed = secrets.randbits(32) if seed is None else seed
+    rng = np.random.default_rng(seed) if rng is None else rng
+    coeffs = rng.integers(size=num, high=high_coeff, low=low_coeff)
+    mats = []
+    for _ in range(num):
+        mats.append(
+            rng.integers(size=shape, high=high, low=low)
+        )
+    return coeffs, mats
+
+
 def lin_comb_vec(
-    shape,
+        shape,
     rng=None,
     seed=None,
     low=-10,

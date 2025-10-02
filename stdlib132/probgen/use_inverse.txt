@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Let $A$ be matrix such that $A^{{-1}}$ is defined as below.
+Use this to determine the solutions to the matrix equations of the form $A\mathbf x = \mathbf b_i$, where each $\mathbf b_i$ is defined below.
+{mat_vecs}

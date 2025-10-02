@@ -1,0 +1,4 @@
+% id: {ident}
+% seed: {seed}
+Compute the result of the expression ${mat_lin_comb}$ where the matrices in the expression are defined as follows.
+{mats}

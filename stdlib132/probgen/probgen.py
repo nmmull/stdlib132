@@ -198,9 +198,9 @@ def one_to_one_onto_matrix_trans(mat: np.ndarray, seed: int) -> str:
 
     Parameters
     ----------
-    mat:
+    mat : numpy.npdarray
         Matrix for the transformation.
-    seed:
+    seed: int
         Seed used to generate `mat`.
 
     Returns
@@ -220,9 +220,9 @@ def draw_unit_square(mat: np.ndarray, seed: int) -> str:
 
     Parameters
     ----------
-    mat:
+    mat : numpy.ndarray
         Matrix for the transformation.  It must be a 2 by 2 matrix.
-    seed:
+    seed : int
         Seed used to generate `mat`.
 
     Returns
@@ -235,6 +235,96 @@ def draw_unit_square(mat: np.ndarray, seed: int) -> str:
         seed=seed,
         mat=latex.bmatrix(mat),
     )
+
+
+def compute_lin_comb_mat(coeffs : np.ndarray, mats : list[np.ndarray], seed : int) -> str:
+    """Compute linear combination of matrices
+
+    Parameters
+    ----------
+    mats : numpy.ndarray
+        Matrices in linear combination.
+    seed : int
+        Seed use to generate mats.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in compute_lin_comb_mat.txt.
+    """
+    letters = list("ABCDEFGHIJKLMNOPQRSTUVWZYZ")
+    mats = [(letters[i], mats[i]) for i in range(len(mats))]
+    return prob_text(
+        seed=seed,
+        mat_lin_comb=latex.lin_comb(coeffs, letters, "\\mathbf{0}"),
+        mats=latex.mat_set(mats),
+    )
+
+def compute_mat_mul(mat1: np.ndarray, mat2: np.ndarray, seed: int) -> str:
+    """Compute matrix multiplication
+
+    Parameters
+    ----------
+    mat1 : numpy.ndarray
+        First matrix in multiplication.
+    mat2 : numpy.ndarray
+        Second matrix in multiplication.
+    seed :
+        Seed used for generating matrices.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in compute_mat_mul.txt.
+
+    """
+    return prob_text(
+        seed=seed,
+        mats=latex.mat_set([("A", mat1), ("B", mat2)]),
+    )
+
+def use_inverse(inv_mat: np.ndarray, vecs: list[np.ndarray], seed: int) -> str:
+    """Use the inverse to solve several matrix equations.
+
+    Parameters
+    ----------
+    inv_mat : numpy.ndarray
+        Inverse matrix use to solve each system.
+    vecs : list[numpy.ndarray]
+        The collections of right-hand sides to the matrix equations.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in compute_mat_mul.txt.
+
+    """
+    vec_names = [f"\\mathbf b_{{{i}}}" for i in range(len(vecs))]
+    mat_vecs = [("A^{-1}", inv_mat)] + list(zip(vec_names, vecs))
+    return prob_text(
+        seed=seed,
+        mat_vecs=latex.mat_set(mat_vecs),
+    )
+
+def determine_inv(mat: np.ndarray, seed: int) -> str:
+    """Determine the inverse of a matrix.
+
+    Parameters
+    ----------
+    mat : numpy.ndarray
+       Matrix to invert.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in determin_inv.txt
+
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
 
 def determine_coefficient_augmented_matrix(aug, seed):
     return prob_text(

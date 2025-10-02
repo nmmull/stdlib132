@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine the inverse of the following matrix.
+If the matrix is not invertible, then explain why.
+\begin{{align*}}
+{mat}
+\end{{align*}}

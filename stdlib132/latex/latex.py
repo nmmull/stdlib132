@@ -67,7 +67,6 @@ def lin_comb(coeffs: np.ndarray, elem_strs: list[str], zero_str: str) -> str:
 
     """
     assert len(coeffs.shape) == 1
-    assert len(elem_strs) == coeffs.shape[0]
     if not np.any(coeffs):
         return zero_str
     i = np.nonzero(coeffs)[0][0]
