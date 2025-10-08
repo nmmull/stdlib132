@@ -299,7 +299,7 @@ def use_inverse(inv_mat: np.ndarray, vecs: list[np.ndarray], seed: int) -> str:
         Problem statement as defined in compute_mat_mul.txt.
 
     """
-    vec_names = [f"\\mathbf b_{{{i}}}" for i in range(len(vecs))]
+    vec_names = [f"\\mathbf b_{{{i + 1}}}" for i in range(len(vecs))]
     mat_vecs = [("A^{-1}", inv_mat)] + list(zip(vec_names, vecs))
     return prob_text(
         seed=seed,
