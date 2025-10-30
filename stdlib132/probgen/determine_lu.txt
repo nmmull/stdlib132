@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Determine an LU factorization of the following matrix.
+\begin{{align*}}
+{mat}
+\end{{align*}}

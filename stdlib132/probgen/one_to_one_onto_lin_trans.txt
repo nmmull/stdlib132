@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine if the following linear transformation is one-to-one, onto, both, or neither.
+Explain your answer.
+\begin{{align*}}
+{lin_trans}
+\end{{align*}}

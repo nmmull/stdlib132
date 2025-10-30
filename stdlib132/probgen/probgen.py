@@ -159,7 +159,7 @@ def lin_trans_out_from_in(mat: np.ndarray, aug: np.ndarray, seed: int) -> str:
         vec=latex.bmatrix(rhs),
     )
 
-def matrix_from_lin_trans(mat: np.ndarray, aug: np.ndarray, seed: int) -> str:
+def matrix_from_lin_trans(mat: np.ndarray, vecs: np.ndarray, seed: int) -> str:
     """Determine the matrix of a linear transformation given a
     collection of images.
 
@@ -167,8 +167,8 @@ def matrix_from_lin_trans(mat: np.ndarray, aug: np.ndarray, seed: int) -> str:
     ----------
     mat : np.ndarray
         Matrix for the linear transformation.
-    aug : np.ndarray
-        Augmented matrix used to generate inputs to the function.
+    vecs : np.ndarray
+        matrix used to generate inputs to the function.
     seed : int
         Seed used to generate `aug`.
 
@@ -179,10 +179,8 @@ def matrix_from_lin_trans(mat: np.ndarray, aug: np.ndarray, seed: int) -> str:
 
     """
     assert len(mat.shape) == 2
-    assert len(aug.shape) == 2
-    assert mat.shape[1] == aug.shape[0]
-    vecs = aug[:,:-1]
-    rhs = aug[:,-1]
+    assert len(vecs.shape) == 2
+    assert mat.shape[1] == vecs.shape[0]
 
     in_strs = [f"T\\left({latex.bmatrix(vecs[i,:])}\\right)" for i in range(vecs.shape[1])]
     outs = [mat @ vecs[i,:] for i in range(vecs.shape[1])]
@@ -292,6 +290,8 @@ def use_inverse(inv_mat: np.ndarray, vecs: list[np.ndarray], seed: int) -> str:
         Inverse matrix use to solve each system.
     vecs : list[numpy.ndarray]
         The collections of right-hand sides to the matrix equations.
+    seed :
+        Seed used for generating matrices.
 
     Returns
     -------
@@ -313,11 +313,13 @@ def determine_inv(mat: np.ndarray, seed: int) -> str:
     ----------
     mat : numpy.ndarray
        Matrix to invert.
+    seed :
+        Seed used for generating the given matrix.
 
     Returns
     -------
     str
-        Problem statement as defined in determin_inv.txt
+        Problem statement as defined in determine_inv.txt
 
     """
     return prob_text(
@@ -325,6 +327,118 @@ def determine_inv(mat: np.ndarray, seed: int) -> str:
         mat=latex.bmatrix(mat),
     )
 
+def matrix_impl_row_ops(shape: tuple[int, int], ops: list[tuple[str, int, int]], seed: int) -> str:
+    """Determine the matrix implementing a sequence of row operations.
+
+    Parameters
+    ----------
+    shape : tuple(int, int)
+        Shape of the expected matrix.
+    ops : list[tuple[str, int, int]]
+        List of row operations.
+    seed :
+        Seed used for generating row operations.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in matrix_impl_row_ops.txt
+
+    """
+    return prob_text(
+        seed=seed,
+        m=shape[0],
+        n=shape[1],
+        row_ops=latex.row_ops(ops)
+    )
+
+def determine_transform_inv(mat: np.ndarray, seed: int) -> str:
+    """Determine the inverse of a linear transformation.
+
+    Parameters
+    ----------
+    matrix : np.ndarray
+        Matrix for the given transformation.
+    seed :
+        Seed used for generating the `matrix`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in determine_transform_inv.txt
+
+    """
+    return prob_text(
+        seed=seed,
+        transform=latex.lin_transform(mat),
+    )
+
+def determine_lu(mat: np.ndarray, seed: int) -> str:
+    """Determine an LU factorization.
+
+    Parameters
+    ----------
+    matrix : np.ndarray
+        Matrix used in the problem.
+    seed :
+        Seed used for generating the `matrix`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in determine_lu.txt
+
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+def inv_from_row_ops(shape, ops, seed):
+    """Determine the inverse based on row operations.
+
+    Parameters
+    ----------
+    shape : tuple(int, int)
+        Shape of the expected matrix.
+    ops : list[tuple[str, int, int]]
+        List of row operations.
+    seed :
+        Seed used for generating row operations.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in inv_from_row_ops.txt
+
+    """
+    return prob_text(
+        seed=seed,
+        m=shape[0],
+        n=shape[1],
+        row_ops=latex.row_ops(ops)
+    )
+
+def one_to_one_onto_lin_trans(mat, seed):
+    """Determine if linear tranformation is 1-1/onto.
+
+    Parameters
+    ----------
+    mat : numpy.npdarray
+        Matrix for the transformation.
+    seed: int
+        Seed used to generate `mat`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in one_to_one_onto_lin_trans.txt.
+
+    """
+    return prob_text(
+        seed=seed,
+        lin_trans=latex.lin_transform(mat),
+    )
 
 def determine_coefficient_augmented_matrix(aug, seed):
     return prob_text(

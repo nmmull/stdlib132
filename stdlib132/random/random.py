@@ -273,13 +273,39 @@ def simple_matrix(
 
 
 def row_op(
-    shape,
-    rng=None,
-    seed=None,
-    low=-5,
-    high=-5,
-):
-    assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
+        shape: tuple[int, int],
+        rng: np.random.Generator | None = None,
+        seed: int | None = None,
+        low: int = -5,
+        high: int = 5,
+) -> tuple[str, int, int]:
+    """Random row operation.
+
+    Parameters
+    ----------
+    shape : tuple[int, int]
+        Shape of the matrix to which to apply row opeartions.  We
+        required that `shape` as at least one element, and that
+        `shape[0] >= 1`.
+    rng : numpy.random.Generator, optional
+        Random number generator used in the process. If `None` is
+        given then one is generated.
+    seed : int, optional
+        Seed used for the random number generator, in the case that
+        `rng = None`.  If `rng` is not `None`, then `seed` is ignored.
+    low : int, default=-5
+        Lowest integer drawn by `rng.integers`.
+    high : int, default=5
+        One above the largest integer drawn by `rng.integers`.
+
+    Returns
+    -------
+    tuple[str, int, int]
+        Random row operations (swap, scale or replace) with random
+        subscripts
+
+    """
+    assert len(shape) >= 1 and shape[0] >= 1
     assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
@@ -293,7 +319,11 @@ def row_op(
         return n + 1 if n >= 0 else n
 
     if op_kind == "swap":
-        return (op_kind, subscript(), subscript())
+        i = subscript()
+        j = subscript()
+        while i == j: #oof
+            j = subscript()
+        return (op_kind, i, j)
     if op_kind == "scale":
         return (op_kind, subscript(), coeff())
     if op_kind == "replace":
@@ -303,19 +333,46 @@ def row_op(
             j += 1
         return (op_kind, i, coeff(), j)
 
-
 def row_ops(
-    shape,
-    num,
-    rng=None,
-    seed=None,
-    low=-5,
-    high=5,
-):
+        shape: tuple[int, int],
+        num: int,
+        rng: np.random.Generator | None = None,
+        seed: int | None = None,
+        low: int = -5,
+        high: int = 5,
+) -> list[tuple[str, int, int]]:
+    """Random sequence of row operation.
+
+    Parameters
+    ----------
+    shape : tuple[int, int]
+        Shape of the matrix to which to apply row opeartions.  We
+        required that `shape` as at least one element, and that
+        `shape[0] >= 1`.
+    num: int
+        Number of row operations in the output sequence.
+    rng : numpy.random.Generator, optional
+        Random number generator used in the process. If `None` is
+        given then one is generated.
+    seed : int, optional
+        Seed used for the random number generator, in the case that
+        `rng = None`.  If `rng` is not `None`, then `seed` is ignored.
+    low : int, default=-5
+        Lowest integer drawn by `rng.integers`.
+    high : int, default=5
+        One above the largest integer drawn by `rng.integers`.
+
+    Returns
+    -------
+    list[tuple[str, int, int]]
+        Random row operations (swap, scale or replace) with random
+        subscripts
+
+    """
     assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
     assert low <= high
     seed = secrets.randbits(32) if seed is None else seed
     rng = np.random.default_rng(seed) if rng is None else rng
     return [
         row_op(shape, rng=rng, seed=seed, low=low, high=high) for _ in range(num)
-    ], seed
+    ]

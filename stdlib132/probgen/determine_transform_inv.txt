@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Determine the inverse of the following transformation, if it exists.
+If the following transformation is not invertible, then write \textit{{SINGULAR}}.
+Your solution should be in the form of a transformation, as given below.
+\begin{{align*}}
+{transform}
+\end{{align*}}

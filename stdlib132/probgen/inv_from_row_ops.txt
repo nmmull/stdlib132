@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Suppose that $A$ is a matrix in $\mathbb R^{{{m} \times {n}}}$ such that the following sequence of row operations (from top to bottom) transforms $A$ into the identity matrix.
+Determine the inverse of $A$.
+(Hint: Don't determine $A$ first)
+{row_ops}

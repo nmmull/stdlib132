@@ -202,7 +202,6 @@ def point(v) -> str:
 
 def lin_transform(a: np.ndarray) -> str:
     """Latex for a linear transformation
-
     Parameters
     ----------
     a : numpy.ndarray

@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Determine the matrix in $\mathbb R^{{{m} \times {n}}}$ that implements the following row operations, in order from top to bottom.
+That is, determine a matrix $A$ such that $AB$ is the result of applying the following row operations, from top to bottom, to $B$.
+{row_ops}
