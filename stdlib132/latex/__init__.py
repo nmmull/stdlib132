@@ -7,11 +7,13 @@ from .latex import (
     lin_transform,
     row_op,
     row_ops,
+    span,
     gen_form_sol,
     lin_comb_vec,
     vec_set,
     vec_eq,
     mat_set,
+    vector_set,
 )
 
 __all__ = [
@@ -23,9 +25,11 @@ __all__ = [
     "point",
     "row_op",
     "row_ops",
+    "span",
     "gen_form_sol",
     "lin_comb_vec",
     "vec_set",
     "vec_eq",
     "mat_set",
+    "vector_set",
 ]

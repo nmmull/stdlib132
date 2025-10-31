@@ -424,9 +424,9 @@ def one_to_one_onto_lin_trans(mat, seed):
 
     Parameters
     ----------
-    mat : numpy.npdarray
+    mat : numpy.ndarray
         Matrix for the transformation.
-    seed: int
+    seed : int
         Seed used to generate `mat`.
 
     Returns
@@ -438,6 +438,69 @@ def one_to_one_onto_lin_trans(mat, seed):
     return prob_text(
         seed=seed,
         lin_trans=latex.lin_transform(mat),
+    )
+
+def col_null(mat, seed):
+    """Determine column/null space of matrix.
+
+    Parameters
+    ----------
+    mat : numpy.ndarray
+        Matrix for problem.
+    seed : int
+        Seed used to generate `mat`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in col_null.txt.
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+
+def find_basis(vecs, seed):
+    """Find basis of subspace.
+
+    Parameters
+    ----------
+    vecs : numpy.ndarray
+        Matrix containing vectors
+    seed : int
+        Seed used to generate `vecs`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in find_basis.txt.
+    """
+    return prob_text(
+        seed=seed,
+        span=latex.span(vecs),
+    )
+
+
+def coord_vec(aug, seed):
+    """Determine coordinate vector.
+
+    Parameters
+    ----------
+    aug : numpy.ndarray
+        matrix containing vector and basis
+    seed : int
+        Seed used to generate `aug`.
+
+    Returns
+    -------
+    str
+        Problem statement as defined in find_basis.txt.
+    """
+    return prob_text(
+        seed=seed,
+        vec = latex.bmatrix(aug[:,-1]),
+        vec_set = latex.vector_set(aug[:,:-1]),
     )
 
 def determine_coefficient_augmented_matrix(aug, seed):

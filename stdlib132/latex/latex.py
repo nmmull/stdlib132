@@ -317,6 +317,19 @@ def vec_set(vecs, names=None):
     return out
 
 
+def vector_set(vecs):
+    out = "\\left\\{"
+    out += f"{bmatrix(vecs[:, 0])}"
+    for i in range(1, vecs.shape[1]):
+        out += f", {bmatrix(vecs[:, i])}"
+    out += "\\right\\}"
+    return out
+
+
+def span(vecs):
+    return "\\mathrm{span}\\!" + vector_set(vecs)
+
+
 def vec_eq(aug):
     out = "\\begin{align*}\n"
     out += f"x_1{bmatrix(aug[:, 0])}"

@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Determine a basis for the following subspace.
+\begin{{align*}}
+{span}
+\end{{align*}}

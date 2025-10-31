@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Determine the coordinate vector $[\mathbf u]_{{\mathcal B}}$ where $\mathbf u$ and $\mathcal B$ are defined below.
+\begin{{align*}}
+\mathbf u = {vec}
+\qquad
+\mathcal B = {vec_set}
+\end{{align*}}
