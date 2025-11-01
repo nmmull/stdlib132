@@ -4,7 +4,7 @@ For the following matrix $A$, determine
 \textbf{{(1)}} a basis for $\mathrm{{Col}}(A)$,
 \textbf{{(2)}} a basis for $\mathrm{{Nul}}(A)$,
 \textbf{{(3)}} $\mathrm{{rank}}(A)$, and
-\textbf{{(4)}} $\mathrm{{dim}}(\mathrm{{rank}}(A))$.
+\textbf{{(4)}} $\mathrm{{dim}}(\mathrm{{Nul}}(A))$.
 
 \begin{{align*}}
 A = {mat}
