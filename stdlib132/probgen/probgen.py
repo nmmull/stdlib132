@@ -503,6 +503,70 @@ def coord_vec(aug, seed):
         vec_set = latex.vector_set(aug[:,:-1]),
     )
 
+
+def lu_fact(mat, seed):
+    """Determine the LU factorization.
+
+    Parameters
+    ----------
+    mat : numpy.ndarray
+        matrix to factor.
+    seed : int
+        Seed used to generate `mat`
+
+    Returns
+    -------
+    str
+        Problem statement as defined in lu_fact.txt.
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+
+def state_diag(mat, seed):
+    """Draw a state diagram
+
+    Parameters
+    ----------
+    mat : numpy.ndarray
+        Transition matrix.
+    seed : int
+        Seed used to generate `mat`
+
+    Returns
+    -------
+    str
+        Problem statement as defined in state_diag.txt.
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+
+def steady_state(mat, seed):
+    """Determine steady state.
+
+    Parameters
+    ----------
+    mat : numpy.ndarray
+        Transition matrix.
+    seed : int
+        Seed used to generate `mat`
+
+    Returns
+    -------
+    str
+        Problem statement as defined in steady_state.txt.
+    """
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+
 def determine_coefficient_augmented_matrix(aug, seed):
     return prob_text(
         seed=seed,

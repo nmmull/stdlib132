@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Draw the state diagram with the following transition matrix.
+You should label each state in your diagram with the index of its corresponding column.
+That is, the state corresponding to the first column should be labeled \enquote{{1}} and the state corresponding to the second column should be labeled \enquote{{2}} and so on.
+\begin{{align*}}
+{mat}
+\end{{align*}}
