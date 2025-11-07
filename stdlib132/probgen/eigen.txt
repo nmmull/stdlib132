@@ -1,0 +1,9 @@
+% id: {ident}
+% seed: {seed}
+Determine if $\mathbf v$ is an eigenvector of $A$.
+If it is, find its corresponding eigenvalue.
+\begin{{align*}}
+A = {mat}
+\qquad
+\mathbf v = {vec}
+\end{{align*}}

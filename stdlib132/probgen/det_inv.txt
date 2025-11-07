@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Calculate $\mathsf{{det}}(A^{{-1}})$ where $A$ is given below.
+\begin{{align*}}
+A = {mat}
+\end{{align*}}

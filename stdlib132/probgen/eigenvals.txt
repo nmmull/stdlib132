@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+For the following matrix, determine all eigenvalues and bases for the corresponding eigenspaces.
+\begin{{align*}}
+{mat}
+\end{{align*}}

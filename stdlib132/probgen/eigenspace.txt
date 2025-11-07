@@ -1,0 +1,9 @@
+% id: {ident}
+% seed: {seed}
+Determine if $\lambda$ is an eigenvalue of $A$.
+If it is, find a basis for the corresponding eigenspace.
+\begin{{align*}}
+A = {mat}
+\qquad
+\lambda = {lamb}
+\end{{align*}}

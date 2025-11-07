@@ -566,6 +566,37 @@ def steady_state(mat, seed):
         mat=latex.bmatrix(mat),
     )
 
+def eigen(mat, vec, seed):
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+        vec=latex.bmatrix(vec),
+    )
+
+def eigenspace(mat, lamb, seed):
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+        lamb=lamb,
+    )
+
+def eigenvals(mat, seed):
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+def det(mat, seed):
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
+
+def det_inv(mat, seed):
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
 
 def determine_coefficient_augmented_matrix(aug, seed):
     return prob_text(
