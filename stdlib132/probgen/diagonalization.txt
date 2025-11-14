@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine a diagonalization of the following matrix, if it exists.
+You can leave the rightmost factor in the form $P^{{-1}}$, i.e., you don't have to compute the inverse of $P$.
+\begin{{align*}}
+{mat}
+\end{{align*}}

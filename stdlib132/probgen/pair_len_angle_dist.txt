@@ -1,0 +1,5 @@
+% id: {ident}
+% seed: {seed}
+Determine the following: (a) the lengths of $\mathbf v_1$ and $\mathbf v_2$, (b) the angle between $\mathbf v_1$ and $\mathbf v_2$, (c) the distance between $\mathbf v_1$ and $\mathbf v_2$, (d) the unit-length normalizations of $\mathbf v_1$ and $\mathbf v_2$.
+You may need to use a calculator for some of these values, but you must simplify the expression as much as you can before giving the approximate result to a couple decimal places.
+{vecs}

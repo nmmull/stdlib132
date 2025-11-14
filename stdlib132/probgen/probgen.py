@@ -2,7 +2,7 @@ from .. import latex, utils
 from pathlib import Path
 import numpy as np
 import inspect
-
+import sympy
 
 # silly but workable trick recommended by TerrierGPT
 class SafeDict(dict):
@@ -40,6 +40,30 @@ def standalone(problems: list[str]) -> str:
         problems=out,
     )
 
+def change_of_basis(vecs, seed):
+    return prob_text(
+        seed=seed,
+        vecs=latex.vector_set(vecs),
+    )
+
+def diag_by_poly(mat, poly, seed):
+    return prob_text(
+        seed=seed,
+        mat=sympy.latex(mat),
+        poly=sympy.latex(poly),
+    )
+
+def pair_len_angle_dist(vecs, seed):
+    return prob_text(
+        seed=seed,
+        vecs=latex.vec_set(vecs),
+    )
+
+def diagonalization(mat, seed):
+    return prob_text(
+        seed=seed,
+        mat=latex.bmatrix(mat),
+    )
 
 def dom_cod_mat(a: np.ndarray, seed: int) -> str:
     """Determine domain, codomain, and underyling matrix.
