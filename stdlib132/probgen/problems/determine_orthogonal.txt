@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Determine if the following set of vectors is orthogonal.
+\begin{{align*}}
+{vecs}
+\end{{align*}}

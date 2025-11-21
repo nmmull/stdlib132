@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Express the vector $\mathbf v$ in terms of the given orthonormal basis.
+\begin{{align*}}
+\mathbf v = {vec}
+\qquad
+\mathcal B = {basis}
+\end{{align*}}

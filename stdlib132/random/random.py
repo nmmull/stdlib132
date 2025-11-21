@@ -1,23 +1,36 @@
+import math
 import secrets
+import random
 import numpy as np
+import sympy
+from sympy import Matrix, MatrixBase
+
+def mk_seed(seed):
+    if seed is None:
+        seed = secrets.randbits(32)
+        print(seed)
+    return seed
 
 def seed():
     return secrets.randbits(32)
 
-def rng(seed):
-    return np.random.default_rng(seed)
+def mk_rng(seed):
+    return random.Random(seed)
 
 def int_matrix(
-    shape: tuple[int, int],
-    rng: np.random.Generator | None = None,
-    seed: int | None = None,
-    low: int = -10,
-    high: int = 10,
+        rows: int,
+        cols: int,
+        rng: random.Random | None = None,
+        seed: int | None = None,
+        low: int = None,
+        high: int = None,
+        kind: str = None
 ) -> np.ndarray:
     """A random integer matrix.
 
     Parameters
     ----------
+    TODO FIX
     shape : tuple[int, int]
         Shape of the matrix in the form `(r, c)` where `r` is the
         number of rows and `c` is the number of columns.  We require
@@ -42,13 +55,43 @@ def int_matrix(
         entries between `low` (inclusive) and `high` (exclusive).
 
     """
-    assert shape[0] >= 1 and shape[1] >= 1
+    low = -10 if low is None else low
+    high = 10 if high is None else high
     assert low <= high
-    seed = secrets.randbits(32) if seed is None else seed
-    rng = np.random.default_rng(seed) if rng is None else rng
-    out = rng.integers(size=shape, low=low, high=high)
-    return out
-
+    assert rows >= 1 and cols >= 1
+    if rng is None:
+        seed = mk_seed(seed)
+        rng = mk_rng(seed)
+    kind = 'full' if kind is None else kind
+    if kind == 'full':
+        return sympy.randMatrix(
+            rows,
+            cols,
+            min=low,
+            max=high,
+            prng=rng,
+        )
+    elif kind == 'rref':
+        return rref(
+            rows,
+            cols,
+            low=low,
+            high=high,
+            rng=rng,
+        )
+    elif kind == 'diag':
+        a = sympy.randMatrix(
+            rows,
+            cols,
+            min=low,
+            max=high,
+            prng=rng,
+        )
+        return Matrix.diag(
+            a.diagonal().tolist()[0],
+            rows=rows,
+            cols=cols,
+        )
 
 def int_vector(
         num: int,
@@ -146,10 +189,10 @@ def lin_comb(
 
 def lin_comb_vec(
         shape,
-    rng=None,
-    seed=None,
-    low=-10,
-    high=10,
+        rng=None,
+        seed=None,
+        low=-10,
+        high=10,
 ):
     assert len(shape) == 2 and shape[0] >= 1 and shape[1] >= 1
     assert low <= high
@@ -159,16 +202,65 @@ def lin_comb_vec(
     vecs = rng.integers(size=shape, low=low, high=high)
     return coeffs, vecs, seed
 
-
 def rref(
-    shape: tuple[int, int],
-    rank: int | None = None,
-    force_consistent=False,
-    force_first_column=True,
-    rng=None,
-    seed=None,
-    low=-6,
-    high=6,
+        rows,
+        cols,
+        force_consistent=False,
+        force_first_column=True,
+        rank=None,
+        rng=None,
+        seed=None,
+        low=None,
+        high=None,
+):
+    low = -6 if low is None else low
+    high = 6 if high is None else high
+    assert low <= high
+    assert rows >= 1 and cols >= 1
+    if rank is not None:
+        assert 0 <= rank and rank <= min(rows, cols)
+    if rank is None:
+        cap = min(rows, cols) + 1
+        if force_consistent:
+            cap = min(rows + 1, cols)
+        if force_first_column:
+            cap -= 1
+        rank = rng.integers(cap)
+        if force_first_column:
+            rank += 1
+    seed = secrets.randbits(32) if seed is None else seed
+    rng = random.Random(seed) if rng is None else rng
+    a = Matrix.zeros(rows, cols)
+    max_pivot = cols
+    num_pivots = rank
+    if force_consistent:
+        max_pivot -= 1
+    if force_first_column:
+        max_pivot -= 1
+        num_pivots -= 1
+    pivot_cols = rng.sample([i for i in range(max_pivot)], num_pivots)
+    if force_first_column:
+        pivot_cols = [0] + list(map(lambda x: x + 1, pivot_cols))
+    pivot_cols.sort()
+    for i in range(rank):
+        pivot_pos = pivot_cols[i]
+        zeros = [0 for _ in range(pivot_pos + 1)]
+        rands = [rng.randint(low, high) for _ in range(cols - pivot_pos - 1)]
+        a[i,:] = Matrix(zeros + rands).T
+    eye = Matrix.eye(rows, rank)
+    for i in range(rank):
+        a[:, pivot_cols[i]] = eye[:, i]
+    return a
+
+def _rref(
+        shape: tuple[int, int],
+        rank: int | None = None,
+        force_consistent=False,
+        force_first_column=True,
+        rng=None,
+        seed=None,
+        low=-6,
+        high=6,
 ):
     assert shape[0] >= 1 and shape[1] >= 1
     if rank is not None:
@@ -213,6 +305,31 @@ def rref(
         a[:, pivot_cols[i]] = eye[:, i]
     return a, seed
 
+def scramble(
+        a,
+        unit_scaling=False,
+        low=None,
+        high=None,
+        seed=None,
+        rng=None,
+):
+    low = -3 if low is None else low
+    high = 3 if high is None else high
+    assert low <= high
+    def scale_factor():
+        negate = 2 * rng.randint(0, 1) - 1
+        if unit_scaling:
+            return negate
+        return negate * (abs(rng.randint(low + 1, high - 1)) + 1)
+    rng = random.Random(seed) if rng is None else rng
+    for i in range(a.rows):
+        for prev_i in range(i):
+            a[prev_i,:] += rng.randint(low, high) * a[i,:]
+    for i in range(a.rows - 1, -1, -1):
+        for next_i in range(i + 1, a.rows):
+            a[next_i,:] *= scale_factor()
+            a[next_i,:] += rng.randint(low, high) * a[i,:]
+    a[0,:] *= scale_factor()
 
 def scrambled(
     a,
@@ -376,3 +493,26 @@ def row_ops(
     return [
         row_op(shape, rng=rng, seed=seed, low=low, high=high) for _ in range(num)
     ]
+
+def orthogonal_set(
+        num: int,
+        dim: int,
+        rng: random.Random | None = None,
+        seed: int | None = None,
+        low: int = None,
+        high: int = None,
+) -> list[MatrixBase]:
+    assert num <= dim
+    A = int_matrix(
+        rows=dim,
+        cols=num,
+        rng=rng,
+        seed=seed,
+        low=low,
+        high=high,
+    )
+    vs = sympy.Matrix.orthogonalize(*[A[:,i] for i in range(A.cols)])
+    entries = []
+    for v in vs:
+        entries += map(lambda x: x.as_numer_denom()[1], [x for x in v])
+    return [v * math.lcm(*entries) for v in vs]

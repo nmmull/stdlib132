@@ -1,3 +1,4 @@
+import sympy
 import numpy as np
 
 
@@ -20,9 +21,9 @@ def lined_env(env: str, lines: list[str]) -> str:
     assert len(lines) > 0
     out = ""
     for line in lines[:-1]:
-        out += line + " \\\\\n"
+        out += line + " \\\\"
     out += lines[-1]
-    return f"\\begin{{{env}}}\n" + out + f"\n\\end{{{env}}}"
+    return f"\\begin{{{env}}}" + out + f"\\end{{{env}}}"
 
 
 def align_env(lines: list[str], star: bool = True) -> str:
@@ -32,7 +33,7 @@ def align_env(lines: list[str], star: bool = True) -> str:
     ----------
     lines : list[str]
         Lines to be put in an `align` environment.
-    star : bool, default=True
+    star : bool
         Determines if number labels should be removed from the lines
         in the environment.
 
@@ -46,19 +47,24 @@ def align_env(lines: list[str], star: bool = True) -> str:
     return lined_env(env, lines)
 
 
-def lin_comb(coeffs: np.ndarray, elem_strs: list[str], zero_str: str) -> str:
+def lin_comb(
+        coeffs: list[int | sympy.Symbol],
+        elem_strs: list[str] = None,
+        zero_str: str = '0'
+) -> str:
     """Latex for a linear combination.
 
     Parameters
     ----------
-    coeff : numpy.ndarray
-        Coefficients used in the linear combination.  This is required
-        to be a 1D array.  We only support integer coefficents as of
-        now.
-    elem_strs : list[str]
+    coeff: list[int]
+        Coefficients used in the linear combination.  We only support
+        integer coefficents as of now.
+    elem_strs: list[str], optional
         The strings used for the elements of the linear combination.
-    zero_str : str
-        The string used in the case that all coefficients are `0`.
+        By default we use `x_i`.
+    zero_str : str, optional
+        The string used in the case that all coefficients are `0`.  By
+        default we use `0`.
 
     Returns
     -------
@@ -66,38 +72,54 @@ def lin_comb(coeffs: np.ndarray, elem_strs: list[str], zero_str: str) -> str:
         Latex for a linear combination.
 
     """
-    assert len(coeffs.shape) == 1
-    if not np.any(coeffs):
+    if elem_strs is None:
+        elem_strs = [f'x{i + 1}' for i in range(len(coeffs))]
+    elem_syms = [Symbol(s) for s in elem_strs]
+    comb = 0
+    for i in range(len(coeffs)):
+        comb += coeff[i] * elem_syms[i]
+    if comb == 0:
         return zero_str
-    i = np.nonzero(coeffs)[0][0]
-    coeff = coeffs[i]
-    out = ""
-    if coeff == 1:
-        coeff_str = ""
-    elif coeff == -1:
-        coeff_str = "-"
-    else:
-        coeff_str = f"{coeff}"
-    out += f"{coeff_str}{elem_strs[i]}"
-    for i in range(i + 1, coeffs.shape[0]):
-        coeff = coeffs[i]
-        if coeff != 0:
-            op = "+" if coeff > 0 else "-"
-            coeff = f"{abs(coeff)}" if abs(coeff) > 1 else ""
-            out += f" {op} {coeff}{elem_strs[i]}"
-    return out
+    return sympy.latex(comb)
+    # if not np.any(coeffs):
+    #     return zero_str
+    # i = np.nonzero(coeffs)[0][0]
+    # coeff = coeffs[i]
+    # out = ""
+    # if coeff == 1:
+    #     coeff_str = ""
+    # elif coeff == -1:
+    #     coeff_str = "-"
+    # else:
+    #     coeff_str = f"{coeff}"
+    # out += f"{coeff_str}{elem_strs[i]}"
+    # for i in range(i + 1, len(coeffs)):
+    #     coeff = coeffs[i]
+    #     if coeff != 0:
+    #         op = "+" if coeff > 0 else "-"
+    #         coeff = f"{abs(coeff)}" if abs(coeff) > 1 else ""
+    #         out += f" {op} {coeff}{elem_strs[i]}"
+    # return out
 
 
-def lin_eq(coeffs: np.ndarray, rhs: int, aligned: bool = False) -> str:
+def lin_eq(
+        coeffs: list[int | sympy.Symbol],
+        rhs: int | sympy.Symbol,
+        var_strs: list[str] = None,
+        aligned: bool = False
+) -> str :
     """Latex for a linear equation.
 
     Parameters
     ----------
-    coeffs : np.ndarray
+    coeffs : list[int]
         The coefficents used for the left side of the equation.  We
         only support integer coefficents as of now.
     rhs: int
         The value used for the right side of the equation
+    var_strs : list[str], optional
+        The names used for variables in the equation.  By default, we
+        use the name `x_i`.
     aligned : bool, default=False
         Determined whether or not to include `&` for the `align*`
         environment
@@ -108,17 +130,17 @@ def lin_eq(coeffs: np.ndarray, rhs: int, aligned: bool = False) -> str:
         Latex for a linear equation.
 
     """
-    lhs = lin_comb(coeffs, [f"x_{{{i + 1}}}" for i in range(len(coeffs))], "0")
+    lhs = lin_comb(coeffs, var_strs)
     eq = "&=" if aligned else "="
     return f"{lhs} {eq} {rhs}"
 
 
-def lin_sys(aug: np.ndarray) -> str:
+def lin_sys(aug: sympy.MatrixBase) -> str:
     """Latex for a linear system.
 
     Parameters
     ----------
-    aug : numpy.ndarray
+    aug : sympy.MatrixBase
         The augmented matrix of a linear system.
 
     Returns
@@ -127,13 +149,17 @@ def lin_sys(aug: np.ndarray) -> str:
         Latex for the linear system with augmented matrix `aug`
 
     """
-    assert len(aug.shape) == 2
-    assert aug.shape[0] >= 1 and aug.shape[1] >= 2
+    assert aug.rows >= 1 and aug.cols >= 2
     lines = []
-    for i in range(aug.shape[0]):
-        if not np.all(aug[i] == 0):
-            lines.append(lin_eq(aug[i, :-1], aug[i, -1], aligned=True))
+    for i in range(aug.rows):
+        if all(entry.is_zero for entry in aug.row(i)):
+            row = list(aug.row(i))
+            lines.append(lin_eq(row[:-1], row[-1], aligned=True))
     return align_env(lines)
+
+
+def matrix(aug: sympy.MatrixBase) -> str:
+    return sympy.latex(aug)
 
 
 def bmatrix_env(lines: list[str]):
@@ -184,29 +210,19 @@ def bmatrix(a) -> str:
 
 
 def point(v) -> str:
-    """Latex for a point.
-
-    Parameters
-    ----------
-    v
-        A collection of values for the entries of the point.
-
-    Returns
-    -------
-    str
-        Latex for a point.
-
-    """
     return f"{tuple(v)}"
 
 
-def lin_transform(a: np.ndarray) -> str:
-    """Latex for a linear transformation
+def lin_transform(a: sympy.MatrixBase, var_strs: list[str] = None) -> str:
+    """Latex for a linear transformation.
+
     Parameters
     ----------
-    a : numpy.ndarray
+    a : sympy.MatrixBase
         The coefficients used in the output entires of the linear
         transformation.
+    var_strs : list[str], optional
+        Names used for variables. By default we use `x_i`
 
     Returns
     -------
@@ -214,13 +230,14 @@ def lin_transform(a: np.ndarray) -> str:
         Latex for the linear transformation defined by `a`
 
     """
-    assert len(a.shape) == 2
-    assert a.shape[0] >= 1 and a.shape[1] >= 1
-    var_names = [f"x_{{{i + 1}}}" for i in range(a.shape[1])]
+    assert a.rows >= 1 and a.cols >= 1
+    if var_strs is None:
+        var_strs = [f"x{i + 1}" for i in range(a.cols)]
     lin_combs = []
-    for coeffs in a:
-        lin_combs.append(lin_comb(coeffs, var_names, "0"))
-    return f"{bmatrix(var_names)} \\mapsto {bmatrix(lin_combs)}"
+    for i in a.rows:
+        coeffs = list(a.row(i))
+        lin_combs.append(lin_comb(coeffs, var_strs))
+    return f"{matrix(Matrix(var_strs))} \\mapsto {bmatrix(lin_combs)}"
 
 def row_op(op):
     def scalar(x):
@@ -309,21 +326,25 @@ def vec_set(vecs, names=None):
         names = []
         for i in range(vecs.shape[1]):
             names.append(f"\\mathbf{{v}}_{{{i + 1}}}")
-    out = "\\begin{align*}\n"
+    out = "\\begin{align*}"
     out += f"{names[0]} = {bmatrix(vecs[:, 0])}"
     for i in range(1, vecs.shape[1]):
         out += f" \\quad {names[i]} = {bmatrix(vecs[:, i])}"
-    out += "\n\\end{align*}"
+    out += "\\end{align*}"
     return out
 
 
-def vector_set(vecs):
+def set(elems: list[str]) -> str:
     out = "\\left\\{"
-    out += f"{bmatrix(vecs[:, 0])}"
-    for i in range(1, vecs.shape[1]):
-        out += f", {bmatrix(vecs[:, i])}"
+    out += f"{elems[0]}"
+    for i in range(1, len(elems)):
+        out += f", {elems[i]}"
     out += "\\right\\}"
     return out
+
+
+def vector_set(vecs: list[sympy.MatrixBase]) -> str:
+    return set([matrix(vec) for vec in vecs])
 
 
 def span(vecs):

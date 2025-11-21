@@ -1,8 +1,9 @@
-from .. import latex, utils
+from .. import latex, utils, random
 from pathlib import Path
 import numpy as np
 import inspect
 import sympy
+from sympy import Matrix, Symbol
 
 # silly but workable trick recommended by TerrierGPT
 class SafeDict(dict):
@@ -10,13 +11,275 @@ class SafeDict(dict):
         return "{" + key + "}"
 
 
-here = Path(__file__).parent
+_here = Path(__file__).parent
 
 
 def prob_text(**kwargs):
     ident = inspect.stack()[1].function
-    with open(here / (ident + ".txt"), "r") as f:
+    with open(_here / "problems" / (ident + ".txt"), "r") as f:
         return f.read().format(ident=ident, **kwargs)
+
+def least_squares_solve(
+        rows,
+        cols,
+        rank,
+        seed=None,
+        mat_low=None,
+        mat_high=None,
+        unit_scaling=False,
+        consistent=False,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    if not consistent:
+        a = random.rref(
+            rows=rows,
+            cols=cols,
+            rank=rank,
+            rng=rng,
+            low=mat_low,
+            high=mat_high,
+        )
+        random.scramble(
+            a,
+            rng=rng,
+            unit_scaling=unit_scaling
+        )
+        b = random.int_matrix(
+            rows=rows,
+            cols=1,
+            rng=rng
+        )
+    else:
+        _a = random.rref(
+            rows=rows,
+            cols=cols + 1,
+            rank=rank,
+            force_consistent=True,
+            rng=rng,
+            low=mat_low,
+            high=mat_high,
+        )
+        random.scramble(
+            _a,
+            rng=rng,
+            unit_scaling=unit_scaling,
+        )
+        a = _a[:, :-1]
+        b = _a[:, -1]
+    print(a.T @ a)
+    print(a.T @ b)
+    print(Matrix.hstack(a.T @ a, a.T @ b).rref())
+    return prob_text(
+        seed=seed,
+        mat=latex.matrix(a),
+        vec=latex.matrix(b),
+    )
+
+def project_onto_orthonormal(
+        dim,
+        num,
+        seed=None,
+        vec_low=None,
+        vec_high=None,
+        vec_set_low=None,
+        vec_set_high=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    vec = random.int_matrix(
+        rows=dim,
+        cols=1,
+        seed=seed,
+        low=vec_low,
+        high=vec_high,
+    )
+    vec_set = random.orthogonal_set(
+        num=num,
+        dim=dim,
+        rng=rng,
+        low=vec_set_low,
+        high=vec_set_high,
+    )
+    vec_set = [v.normalized() for v in vec_set]
+
+    return prob_text(
+        seed=seed,
+        vec=latex.matrix(vec),
+        vec_set=latex.matrix(vec_set),
+    )
+
+
+def project_onto_vector(
+        dim,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    vecs = random.int_matrix(
+        rows=dim,
+        cols=2,
+        seed=seed,
+    )
+    return prob_text(
+        seed=seed,
+        u=latex.matrix(vecs[:,0]),
+        v=latex.matrix(vecs[:,1]),
+    )
+
+
+def in_terms_of_orthonormal(
+        dim,
+        seed=None,
+        basis_low=None,
+        basis_high=None,
+        vec_low=None,
+        vec_high=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    basis = random.orthogonal_set(
+        num=dim,
+        dim=dim,
+        rng=rng,
+        low=basis_low,
+        high=basis_high,
+    )
+    basis = [v.normalized() for v in basis]
+    vec = random.int_matrix(
+        rows=dim,
+        cols=1,
+        rng=rng,
+        low=vec_low,
+        high=vec_high,
+    )
+    return prob_text(
+        seed=seed,
+        vec=latex.matrix(vec),
+        basis=latex.matrix(basis),
+    )
+
+def determine_orthogonal(
+        num,
+        dim,
+        answer,
+        seed=None,
+        low=None,
+        high=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    vecs = random.orthogonal_set(
+        num,
+        dim,
+        seed=seed,
+        low=low,
+        high=high
+    )
+    if answer == False: # TODO: Fix this
+        while utils.is_orthogonal(*vecs):
+            i = rng.randint(0, num - 1)
+            j = rng.randint(0, dim - 1)
+            k = rng.randint(low, high)
+            vecs[i][j] = k
+    return prob_text(
+        seed=seed,
+        vecs=latex.vector_set(vecs),
+    )
+
+
+def col_null_given_rref(
+        rows,
+        cols,
+        rank=None,
+        seed=None,
+        rref_low=None,
+        rref_high=None,
+):
+    seed = random.mk_seed(seed)
+    rref = random.rref(
+        rows,
+        cols,
+        rank=rank,
+        seed=seed,
+        low=rref_low,
+        high=rref_high,
+    )
+    mat = Matrix([Symbol(f'\\mathbf a_{{{i + 1}}}') for i in range(cols)]).T
+    return prob_text(
+        seed=seed,
+        mat=latex.matrix(mat),
+        rref=latex.matrix(rref),
+    )
+
+
+def coord_vec(
+        num_vecs,
+        dim,
+        seed=None,
+        rref_low=None,
+        rref_high=None,
+        scramble_low=None,
+        scramble_high=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    mat = random.rref(
+        rows=dim,
+        cols=num_vecs + 1,
+        rank=num_vecs,
+        force_consistent=True,
+        rng=rng,
+        low=rref_low,
+        high=rref_high,
+    )
+    random.scramble(
+        mat,
+        rng=rng,
+        low=scramble_low,
+        high=scramble_high,
+    )
+    vec = mat[:,-1]
+    vec_latex = latex.matrix(vec)
+    basis = [mat[:,i] for i in range(num_vecs)]
+    basis_latex = latex.set([latex.matrix(vec) for vec in basis])
+    return prob_text(
+        seed=seed,
+        vec=vec_latex,
+        vec_set=basis_latex,
+    )
+
+
+def eigenvals(
+        dim,
+        seed=None,
+        diag_low=None,
+        diag_high=None,
+        scramble_low=None,
+        scramble_high=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    d = random.int_matrix(
+        rows=dim,
+        cols=dim,
+        low=diag_low,
+        high=diag_high,
+        kind='diag',
+        rng=rng,
+    )
+    l = Matrix.eye(2)
+    random.scramble(
+        l,
+        unit_scaling=True,
+        low=scramble_low,
+        high=scramble_high,
+        rng=rng,
+    )
+    mat = l @ d @ l.inv()
+    return prob_text(
+        seed=seed,
+        mat=latex.matrix(mat),
+    )
 
 
 def standalone(problems: list[str]) -> str:
@@ -464,6 +727,7 @@ def one_to_one_onto_lin_trans(mat, seed):
         lin_trans=latex.lin_transform(mat),
     )
 
+
 def col_null(mat, seed):
     """Determine column/null space of matrix.
 
@@ -504,29 +768,6 @@ def find_basis(vecs, seed):
         seed=seed,
         span=latex.span(vecs),
     )
-
-
-def coord_vec(aug, seed):
-    """Determine coordinate vector.
-
-    Parameters
-    ----------
-    aug : numpy.ndarray
-        matrix containing vector and basis
-    seed : int
-        Seed used to generate `aug`.
-
-    Returns
-    -------
-    str
-        Problem statement as defined in find_basis.txt.
-    """
-    return prob_text(
-        seed=seed,
-        vec = latex.bmatrix(aug[:,-1]),
-        vec_set = latex.vector_set(aug[:,:-1]),
-    )
-
 
 def lu_fact(mat, seed):
     """Determine the LU factorization.
@@ -604,11 +845,6 @@ def eigenspace(mat, lamb, seed):
         lamb=lamb,
     )
 
-def eigenvals(mat, seed):
-    return prob_text(
-        seed=seed,
-        mat=latex.bmatrix(mat),
-    )
 
 def det(mat, seed):
     return prob_text(

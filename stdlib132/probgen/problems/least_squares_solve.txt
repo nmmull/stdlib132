@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Solve for all least-squares solutions of the equation $A\mathbf x = \mathbf b$, where $A$ and $\mathbf b$ are defined as follows.
+\begin{{align*}}
+A = {mat}
+\qquad
+\mathbf b = {vec}
+\end{{align*}}

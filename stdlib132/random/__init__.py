@@ -3,12 +3,15 @@ from .random import (
     int_vector,
     lin_comb,
     lin_comb_vec,
-    rng,
+    mk_rng,
     row_op,
     row_ops,
     rref,
     seed,
     simple_matrix,
+    mk_seed,
+    scramble,
+    orthogonal_set,
 )
 
 __all__ = [
@@ -22,4 +25,7 @@ __all__ = [
     "rref",
     "seed",
     "simple_matrix",
+    "mk_seed",
+    "scramble",
+    "orthogonal_set",
 ]

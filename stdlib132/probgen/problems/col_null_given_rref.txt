@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Determine bases for the column space and the null space of the following matrix.
+Note that you are given its RREF.
+
+\begin{{align*}}
+{mat} \sim {rref}
+\end{{align*}}

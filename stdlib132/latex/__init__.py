@@ -14,6 +14,8 @@ from .latex import (
     vec_eq,
     mat_set,
     vector_set,
+    set,
+    matrix,
 )
 
 __all__ = [
@@ -32,4 +34,6 @@ __all__ = [
     "vec_eq",
     "mat_set",
     "vector_set",
+    "set",
+    "matrix",
 ]

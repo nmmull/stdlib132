@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Determine the projection of $\mathbf u$ onto $\mathrm{{span}}\{{\mathbf v\}}$.
+\begin{{align*}}
+\mathbf u = {u}
+\qquad
+\mathbf v = {v}
+\end{{align*}}

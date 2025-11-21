@@ -1,0 +1,8 @@
+% id: {ident}
+% seed: {seed}
+Determine the project of $\mathbf u$ onto the orthnormal set of vectors $V$.
+\begin{{align*}}
+\mathbf u = {vec}
+\qquad
+V = {vec_set}
+\end{{align*}}
