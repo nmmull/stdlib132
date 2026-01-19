@@ -303,10 +303,28 @@ def standalone(problems: list[str]) -> str:
         problems=out,
     )
 
-def change_of_basis(vecs, seed):
+def change_of_basis(
+        num_vecs,
+        dim,
+        seed=None
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    mat = random.rref(
+        rows=dim,
+        cols=num_vecs,
+        rank=num_vecs,
+        rng=rng
+    )
+    random.scramble(
+        mat,
+        rng=rng,
+        unit_scaling=True,
+    )
+    basis_latex = latex.set([latex.matrix(mat[:,i]) for i in range(num_vecs)])
     return prob_text(
         seed=seed,
-        vecs=latex.vector_set(vecs),
+        vecs=basis_latex,
     )
 
 def diag_by_poly(mat, poly, seed):
@@ -322,10 +340,100 @@ def pair_len_angle_dist(vecs, seed):
         vecs=latex.vec_set(vecs),
     )
 
-def diagonalization(mat, seed):
+
+def normalization(
+        dim,
+        low=None,
+        high=None,
+        seed=None,
+
+):
+    seed = random.mk_seed(seed)
+    v = random.int_matrix(
+        rows=dim,
+        cols=1,
+        low=low,
+        high=high,
+        seed=seed
+    )
     return prob_text(
         seed=seed,
-        mat=latex.bmatrix(mat),
+        vec=latex.matrix(v),
+    )
+
+
+def diagonalization(
+        dim,
+        low=None,
+        high=None,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    d = random.int_matrix(
+        rows=dim,
+        cols=dim,
+        low=low,
+        high=high,
+        kind='diag',
+        rng=rng,
+    )
+    p = random.rref(
+        rows=dim,
+        cols=dim,
+        rank=dim,
+        low=low,
+        high=high,
+        rng=rng,
+    )
+    random.scramble(
+        p,
+        low=low,
+        high=high,
+        rng=rng,
+        unit_scaling=True,
+    )
+    mat_latex = latex.matrix(p @ d @ p.inv())
+    return prob_text(
+        seed=seed,
+        mat=mat_latex,
+    )
+
+def diagonalization_quiz(
+        dim,
+        low=None,
+        high=None,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    d = random.int_matrix(
+        rows=dim,
+        cols=dim,
+        low=low,
+        high=high,
+        kind='diag',
+        rng=rng,
+    )
+    p = random.rref(
+        rows=dim,
+        cols=dim,
+        rank=dim,
+        low=low,
+        high=high,
+        rng=rng,
+    )
+    random.scramble(
+        p,
+        low=low,
+        high=high,
+        rng=rng,
+        unit_scaling=True,
+    )
+    mat_latex = latex.matrix(p @ d @ p.inv())
+    return prob_text(
+        seed=seed,
+        mat=mat_latex,
     )
 
 def dom_cod_mat(a: np.ndarray, seed: int) -> str:
@@ -858,7 +966,18 @@ def det_inv(mat, seed):
         mat=latex.bmatrix(mat),
     )
 
-def determine_coefficient_augmented_matrix(aug, seed):
+
+def determine_coefficient_augmented_matrix(
+        num_eqs,
+        num_vars,
+        seed,
+):
+    seed = random.mk_seed(seed)
+    aug = random.int_matrix(
+        rows=num_eqs,
+        cols=num_vars + 1,
+        seed=seed,
+    )
     return prob_text(
         seed=seed,
         lin_sys=latex.lin_sys(aug),
@@ -872,19 +991,52 @@ def determine_linear_system(aug, seed):
     )
 
 
-def determine_unique_solution_linear_system(aug, seed):
-    assert np.linalg.matrix_rank(aug) == aug.shape[0]
+def determine_unique_solution_linear_system(
+        num_eqs,
+        seed=None
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    aug = random.rref(
+        rows=num_eqs,
+        cols=num_eqs + 1,
+        force_consistent=True,
+        rank=num_eqs,
+        rng=rng,
+    )
+    random.scramble(
+        aug,
+        rng=rng
+    )
     return prob_text(
         seed=seed,
-        lin_sys=latex.int_lin_sys(aug),
+        lin_sys=latex.lin_sys(aug),
     )
 
 
-def verify_solution_linear_system(sol, aug, seed):
+def verify_solution_linear_system(
+        num_eqs,
+        num_vars,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    aug = random.rref(
+        rows=num_eqs,
+        cols=num_vars + 1,
+        force_consistent=True,
+        rng=rng,
+    )
+    print(sympy.pretty(aug))
+    random.scramble(
+        aug,
+        rng=rng,
+    )
+    sol = (1, 2, 3)
     return prob_text(
         seed=seed,
-        sol=latex.solution(sol),
-        lin_sys=latex.int_lin_sys(aug),
+        sol=str(sol),
+        lin_sys=latex.lin_sys(aug),
     )
 
 
@@ -945,7 +1097,10 @@ def alt_gen_form(rref, seed):
     return prob_text(seed=seed, gen_form=latex.gen_form_sol(rref))
 
 
-def particular_sol(rref, seed):
+def particular_sol(
+        num_rows,
+        num_cols,
+        rref, seed):
     return prob_text(
         seed=seed,
         rref=latex.bmatrix(rref),

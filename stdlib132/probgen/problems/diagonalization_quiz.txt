@@ -1,0 +1,7 @@
+% id: {ident}
+% seed: {seed}
+Determine a diagonalization of the following matrix.
+You must write your solution as a product of three explicit matrices (i.e., you must compute matrix operations like inverses).
+\begin{{align*}}
+{mat}
+\end{{align*}}

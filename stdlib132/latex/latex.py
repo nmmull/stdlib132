@@ -2,6 +2,7 @@ import sympy
 import numpy as np
 
 
+
 def lined_env(env: str, lines: list[str]) -> str:
     """Latex environment with lines.
 
@@ -74,10 +75,10 @@ def lin_comb(
     """
     if elem_strs is None:
         elem_strs = [f'x{i + 1}' for i in range(len(coeffs))]
-    elem_syms = [Symbol(s) for s in elem_strs]
+    elem_syms = [sympy.Symbol(s) for s in elem_strs]
     comb = 0
     for i in range(len(coeffs)):
-        comb += coeff[i] * elem_syms[i]
+        comb += coeffs[i] * elem_syms[i]
     if comb == 0:
         return zero_str
     return sympy.latex(comb)
@@ -152,7 +153,7 @@ def lin_sys(aug: sympy.MatrixBase) -> str:
     assert aug.rows >= 1 and aug.cols >= 2
     lines = []
     for i in range(aug.rows):
-        if all(entry.is_zero for entry in aug.row(i)):
+        if not all(entry.is_zero for entry in aug.row(i)):
             row = list(aug.row(i))
             lines.append(lin_eq(row[:-1], row[-1], aligned=True))
     return align_env(lines)

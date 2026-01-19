@@ -1,0 +1,6 @@
+% id: {ident}
+% seed: {seed}
+Determine the unit-length normalization of the following vector.
+\begin{{align*}}
+{vec}
+\end{{align*}}

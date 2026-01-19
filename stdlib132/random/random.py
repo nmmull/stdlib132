@@ -215,6 +215,9 @@ def rref(
 ):
     low = -6 if low is None else low
     high = 6 if high is None else high
+    if rng is None:
+        seed = mk_seed(seed)
+        rng = mk_rng(seed)
     assert low <= high
     assert rows >= 1 and cols >= 1
     if rank is not None:
@@ -225,11 +228,9 @@ def rref(
             cap = min(rows + 1, cols)
         if force_first_column:
             cap -= 1
-        rank = rng.integers(cap)
+        rank = rng.randint(0, cap-1)
         if force_first_column:
             rank += 1
-    seed = secrets.randbits(32) if seed is None else seed
-    rng = random.Random(seed) if rng is None else rng
     a = Matrix.zeros(rows, cols)
     max_pivot = cols
     num_pivots = rank
@@ -516,3 +517,12 @@ def orthogonal_set(
     for v in vs:
         entries += map(lambda x: x.as_numer_denom()[1], [x for x in v])
     return [v * math.lcm(*entries) for v in vs]
+
+def solution(
+        rref,
+        rng=None,
+        seed=None,
+        low=None,
+        high=None,
+):
+    return None
