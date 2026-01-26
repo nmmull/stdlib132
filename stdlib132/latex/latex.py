@@ -1,8 +1,6 @@
 import sympy
 import numpy as np
 
-
-
 def lined_env(env: str, lines: list[str]) -> str:
     """Latex environment with lines.
 
@@ -308,8 +306,8 @@ def gen_form_sol(rref):
 
 def lin_comb_vec(coeffs, vecs):
     vec_strs = []
-    for i in range(vecs.shape[1]):
-        vec_strs.append(bmatrix(vecs[i, :]))
+    for vec in vecs:
+        vec_strs.append(matrix(vec))
     return lin_comb(coeffs, vec_strs, "\\mathbf{0}")
 
 
@@ -354,9 +352,9 @@ def span(vecs):
 
 def vec_eq(aug):
     out = "\\begin{align*}\n"
-    out += f"x_1{bmatrix(aug[:, 0])}"
-    for i in range(1, aug.shape[1] - 1):
-        out += f" + x_{{{i + 1}}}{bmatrix(aug[:, i])}"
-    out += f"= {bmatrix(aug[:, -1])}\n"
+    out += f"x_1{matrix(aug[:, 0])}"
+    for i in range(1, aug.cols - 1):
+        out += f" + x_{{{i + 1}}}{matrix(aug[:, i])}"
+    out += f"= {matrix(aug[:, -1])}\n"
     out += "\\end{align*}"
     return out

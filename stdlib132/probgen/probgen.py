@@ -1107,16 +1107,38 @@ def particular_sol(
     )
 
 
-def compute_lin_comb_vec(coeffs, vecs, seed):
-    return prob_text(seed=seed, lin_comb_vec=latex.lin_comb_vec(coeffs, vecs))
-
-
-def equiv_vector_eq(aug, seed):
+def compute_lin_comb_vec(
+        dim,
+        num_vecs,
+        seed=None
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    coeffs = list(random.int_matrix(num_vecs, 1, rng=rng))
+    vec_mat = random.int_matrix(dim, num_vecs, rng=rng)
+    vecs = [vec_mat[:,i] for i in range(num_vecs)]
+    lin_comb_latex = latex.lin_comb_vec(coeffs, vecs)
     return prob_text(
         seed=seed,
-        lin_sys=latex.int_lin_sys(aug),
+        lin_comb_vec=lin_comb_latex
     )
 
+def equiv_vector_eq(
+        num_eqs,
+        num_vars,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    aug = random.int_matrix(
+        num_eqs,
+        num_vars + 1,
+        seed=seed
+    )
+    lin_sys = latex.lin_sys(aug)
+    return prob_text(
+        seed=seed,
+        lin_sys=lin_sys,
+    )
 
 def in_span_of_two(matrix, seed):
     assert matrix.shape[1] == 2
@@ -1126,10 +1148,25 @@ def in_span_of_two(matrix, seed):
     )
 
 
-def gen_form_sol_vec_eq(aug, seed):
+def gen_form_sol_vec_eq(
+        dim,
+        num_vecs,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    aug = random.rref(
+        rows=dim,
+        cols=num_vecs,
+        rng=rng)
+    random.scramble(
+        aug,
+        rng=rng,
+    )
+    vec_eq = latex.vec_eq(aug)
     return prob_text(
         seed=seed,
-        vec_eq=latex.vec_eq(aug),
+        vec_eq=vec_eq,
     )
 
 
