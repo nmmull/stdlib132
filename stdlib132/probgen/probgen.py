@@ -1040,14 +1040,21 @@ def verify_solution_linear_system(
     )
 
 
-def apply_row_ops(row_ops, a, ops_seed, mat_seed):
+def apply_row_ops(
+        rows,
+        cols,
+        num,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    ops = random.row_ops(rows, cols, num, rng=rng)
+    matrix = random.int_matrix(rows, cols, rng=rng)
     return prob_text(
-        ops_seed=ops_seed,
-        mat_seed=mat_seed,
-        row_ops=latex.row_ops(row_ops),
-        matrix=latex.bmatrix(a),
+        seed=seed,
+        row_ops=latex.row_ops(ops),
+        matrix=latex.matrix(matrix),
     )
-
 
 def row_ops_pair_transform(ops, mat, seed):
     b = np.copy(mat)
@@ -1059,10 +1066,25 @@ def row_ops_pair_transform(ops, mat, seed):
     )
 
 
-def gen_form_sol_rref(rref, seed):
+def gen_form_sol_rref(
+        rows,
+        cols,
+        rank=None,
+        force_consistent=False,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    rref = random.rref(
+        rows=rows,
+        cols=cols,
+        rank=rank,
+        force_consistent=force_consistent,
+        rng=rng,
+    )
     return prob_text(
         seed=seed,
-        rref=latex.bmatrix(rref),
+        rref=latex.matrix(rref),
     )
 
 
@@ -1086,10 +1108,31 @@ def gen_form_sol_mat_eq(aug, seed):
     )
 
 
-def determine_rref(matrix, seed):
+def determine_rref(
+        rows,
+        cols,
+        rank=None,
+        unit_scaling=False,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    matrix = random.rref(
+        rows=rows,
+        cols=cols,
+        rank=rank,
+        rng=rng,
+    )
+
+    random.scramble(
+        matrix,
+        unit_scaling=unit_scaling,
+        rng=rng,
+    )
+
     return prob_text(
         seed=seed,
-        matrix=latex.bmatrix(matrix),
+        matrix=latex.matrix(matrix),
     )
 
 

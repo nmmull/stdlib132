@@ -1,10 +1,9 @@
 % id: {ident}
-% row_ops seed: {ops_seed}
-% matrix seed: {mat_seed}
+% seed: {seed}
 Apply the row operations:
 {row_ops}
 from top to bottom to the following matrix.
-You must write down the intermediate matrices.
+You must write down the intermediate matrices and row operations you used in your calculation.
 \begin{{align*}}
 {matrix}
 \end{{align*}}
