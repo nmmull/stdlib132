@@ -229,14 +229,13 @@ def lin_transform(a: sympy.MatrixBase, var_strs: list[str] = None) -> str:
         Latex for the linear transformation defined by `a`
 
     """
-    assert a.rows >= 1 and a.cols >= 1
     if var_strs is None:
         var_strs = [f"x{i + 1}" for i in range(a.cols)]
     lin_combs = []
-    for i in a.rows:
+    for i in range(a.rows):
         coeffs = list(a.row(i))
         lin_combs.append(lin_comb(coeffs, var_strs))
-    return f"{matrix(Matrix(var_strs))} \\mapsto {bmatrix(lin_combs)}"
+    return f"{matrix(sympy.Matrix(var_strs))} \\mapsto {bmatrix(lin_combs)}"
 
 def row_op(op):
     def scalar(x):
@@ -313,10 +312,21 @@ def lin_comb_vec(coeffs, vecs):
 
 def mat_set(mats):
     out = "\\begin{align*}\n"
-    out += f"{mats[0][0]} = {bmatrix(mats[0][1])}"
+    out += f"{mats[0][0]} = {matrix(mats[0][1])}"
     for name, mat in mats[1:]:
-        out += f" \\quad {name} = {bmatrix(mat)}"
+        out += f" \\quad {name} = {matrix(mat)}"
     out += "\n\\end{align*}"
+    return out
+
+def matrix_collection(mats, names=None):
+    assert len(mats) >= 1
+    if names is None:
+        names = [f"\\mathbf{{v}}_{{{i + 1}}}" for i in range(mat.cols)]
+    out = "\\begin{align*}"
+    out += f"{names[0]} = {matrix(mats[0])}"
+    for i in range(1, len(mats)):
+        out += f" \\quad {names[i]} = {matrix(mats[i])}"
+    out += "\\end{align*}"
     return out
 
 

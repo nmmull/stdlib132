@@ -16,6 +16,7 @@ from .latex import (
     vector_set,
     set,
     matrix,
+    matrix_collection,
 )
 
 __all__ = [
@@ -36,4 +37,5 @@ __all__ = [
     "vector_set",
     "set",
     "matrix",
+    "matrix_collection",
 ]

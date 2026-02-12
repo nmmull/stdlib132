@@ -457,28 +457,24 @@ def dom_cod_mat(a: np.ndarray, seed: int) -> str:
         lin_trans=latex.lin_transform(a),
     )
 
-def in_range(aug: np.ndarray, seed: int) -> str:
-    """Determine if vector is in range.
-
-    Parameters
-    ----------
-    aug : np.ndarray
-        Augmented matrix used for the problem.  We take the vector to
-        be `aug[:,-1]` and the matrix to be `aug[:,:-1]`.
-    seed: int
-        Seed used to generate `aug`.
-
-    Returns
-    -------
-    str
-        Problem statement as defined in `in_range.txt`.
-
-    """
-    mat_vec = latex.mat_set(
-        [
-            ("A", aug[:, :-1]),
-            ("\\mathbf v", aug[:, -1]),
-        ]
+def in_range(
+        rows,
+        cols,
+        force_consistent=False,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    aug = random.rref(
+        rows,
+        cols + 1,
+        force_consistent=force_consistent,
+        rng=rng,
+    )
+    random.scramble(aug, rng=rng)
+    mat_vec = latex.matrix_collection(
+        [aug[:,:-1], aug[:, -1]],
+        ["A", "\\mathbf v"]
     )
     return prob_text(
         seed=seed,
@@ -1095,7 +1091,25 @@ def gen_form_sol_lin_sys(aug, seed):
     )
 
 
-def gen_form_sol_mat_eq(aug, seed):
+def gen_form_sol_mat_eq(
+        rows,
+        cols,
+        rank=None,
+        force_consistent=False,
+        seed=None,
+):
+    seed = random.mk_seed(seed)
+    rng = random.mk_rng(seed)
+    aug = random.rref(
+        rows=rows,
+        cols=cols + 1,
+        rank=rank,
+        force_consistent=force_consistent,
+        rng=rng)
+    random.scramble(
+        aug,
+        rng=rng,
+    )
     mat_vec = latex.mat_set(
         [
             ("A", aug[:, :-1]),
