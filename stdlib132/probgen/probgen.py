@@ -1096,6 +1096,7 @@ def gen_form_sol_mat_eq(
         cols,
         rank=None,
         force_consistent=False,
+        unit_scaling=False,
         seed=None,
 ):
     seed = random.mk_seed(seed)
@@ -1109,6 +1110,7 @@ def gen_form_sol_mat_eq(
     random.scramble(
         aug,
         rng=rng,
+        unit_scaling=unit_scaling
     )
     mat_vec = latex.mat_set(
         [

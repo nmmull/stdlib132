@@ -321,7 +321,7 @@ def mat_set(mats):
 def matrix_collection(mats, names=None):
     assert len(mats) >= 1
     if names is None:
-        names = [f"\\mathbf{{v}}_{{{i + 1}}}" for i in range(mat.cols)]
+        names = [f"\\mathbf{{v}}_{{{i + 1}}}" for i in range(len(mats))]
     out = "\\begin{align*}"
     out += f"{names[0]} = {matrix(mats[0])}"
     for i in range(1, len(mats)):
