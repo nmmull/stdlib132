@@ -15,13 +15,20 @@ def align_env(lines, star=True) -> str:
     return lined_env(env, lines)
 
 
+def index_first_nz(l):
+    for i in range(len(l)):
+        if l[i] != 0:
+            return i
+    return None
+
+
 def lin_comb(coeffs, elem_strs=None, zero_str=None):
     if elem_strs is None:
         elem_strs = [f'x_{i + 1}' for i in range(len(coeffs))]
     zero_str = '0' if zero_str is None else zero_str
     if not any(coeffs):
         return zero_str
-    i = list(coeffs.iter_items())[0][0]
+    i = index_first_nz(coeffs)
     coeff = coeffs[i]
     out = ""
     if coeff == 1:
@@ -84,7 +91,7 @@ def lin_transform(a, var_strs=None):
 
 def swap_row_op(i, j, align=None):
     align = False if align is None else align
-    arrow = (if align then "&" else "") + "\leftrightarrow"
+    arrow = ("&" if align else "") + "\\leftrightarrow"
     return f"R_{{{i}}} {arrow} R_{{{j}}}"
 
 
@@ -95,7 +102,7 @@ def scale_row_op(i, c, align=None):
     if c == -1:
         scalar_str = "-"
     align = False if align is None else align
-    arrow = (if align then "&" else "") + "\gets"
+    arrow = ("&" if align else "") + "\\gets"
     return f"R_{{{i}}} {arrow} {scalar_str}R_{{{i}}}"
 
 
@@ -103,7 +110,7 @@ def replace_row_op(i, c, j, align=None):
     scalar_str = f"{abs(c)}" if abs(c) > 1 else ""
     op_str = "+" if c >= 1 else "-"
     align = False if align is None else align
-    arrow = (if align then "&" else "") + "\gets"
+    arrow = ("&" if align else "") + "\\gets"
     return f"R_{{{i}}} {arrow} R_{{{i}}} {op_str} {scalar_str}R_{{{j}}}"
 
 
