@@ -2,8 +2,6 @@ from .latex import (
     lin_comb,
     lin_eq,
     lin_sys,
-    bmatrix,
-    point,
     lin_transform,
     row_op,
     row_ops,
